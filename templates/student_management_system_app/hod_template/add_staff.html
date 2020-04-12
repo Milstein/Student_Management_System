@@ -18,6 +18,7 @@ Add Staff
             <h3 class="card-title">Add Staff</h3>
           </div>
           <!-- /.card-header -->
+          
           <!-- form start -->
           <form role="form" action="{% url 'student_management_system_app:add_staff_save' %}" method="post">
             {% csrf_token %}
@@ -45,7 +46,7 @@ Add Staff
               <div class="form-group">
                 <label>Address</label>
                 <input type="text" class="form-control" placeholder="Address" name="address">
-              </div>           
+              </div>
 
             </div>
             <!-- /.card-body -->
@@ -54,11 +55,9 @@ Add Staff
               <button type="submit" class="btn btn-primary btn-block">Add Staff</button>
             </div>
           </form>
+
         </div>
         <!-- /.card -->
-
-
-
       </div>
     </div>
   </div>

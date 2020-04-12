@@ -37,8 +37,12 @@ class Course(models.Model):
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
 
+    def __str__(self):
+        return self.course_name
+    
 
-class Subjects(models.Model):    
+
+class Subject(models.Model):
     # id=models.AutoField(primary_key=True)
     subject_name=models.CharField(max_length=255)
     course_id=models.ForeignKey(Course,on_delete=models.CASCADE,default=1)
@@ -64,7 +68,7 @@ class Student(models.Model):
 
 class Attendance(models.Model):    
     # id=models.AutoField(primary_key=True)
-    subject_id=models.ForeignKey(Subjects,on_delete=models.DO_NOTHING)
+    subject_id=models.ForeignKey(Subject, on_delete=models.DO_NOTHING)
     attendance_date=models.DateTimeField(auto_now_add=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
@@ -146,9 +150,9 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 1:
             AdminHOD.objects.create(admin=instance)
         if instance.user_type == 2:
-            Staff.objects.create(admin=instance)
+            Staff.objects.create(admin=instance,address='')
         if instance.user_type == 3:
-            Student.objects.create(admin=instance)
+            Student.objects.create(admin=instance,course_id=Course.objects.get(id=1),session_start_year='2020-01-01',session_end_year='2021-01-01',address='',profile_pic='',gender='')
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):

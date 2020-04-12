@@ -45,12 +45,12 @@
                             Manage Staff
                         </p>
                     </a>
-                </li>
+                </li>{% endcomment %}
 
                 <li class="nav-header">STUDENTS</li>
                 <li class="nav-item">
                     {% url 'add_student' as add_student %}
-                    <a href="{% url 'add_student' %}"
+                    <a href="{% url 'student_management_system_app:add_student' %}"
                         class="nav-link {% if request.path == add_student %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
@@ -58,7 +58,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {% comment %}<li class="nav-item">
                     {% url 'manage_student' as manage_student %}
                     {% url 'edit_student' student_id=id as edit_student %}
                     <a href="{% url 'manage_student' %}"
@@ -68,12 +68,12 @@
                             Manage Students
                         </p>
                     </a>
-                </li>
+                </li> {% endcomment %}
 
                 <li class="nav-header">COURSES</li>
                 <li class="nav-item">
                     {% url 'add_course' as add_course %}
-                    <a href="{% url 'add_course' %}"
+                    <a href="{% url 'student_management_system_app:add_course' %}"
                         class="nav-link {% if request.path == add_course %} active {% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
@@ -81,7 +81,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {% comment %}<li class="nav-item">
                     {% url 'manage_course' as manage_course %}
                     {% url 'edit_course' course_id=id as edit_course %}
                     <a href="{% url 'manage_course' %}"
