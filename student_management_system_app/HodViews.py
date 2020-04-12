@@ -97,10 +97,12 @@ def add_student_save(request):
             gender = form.cleaned_data["gender"]
 
             profile_pic = request.FILES['profile_pic']
+
+            # FileSystemStorage fallbacks to MEDIA_ROOT when location
+            # is empty, so we restore the empty value.
+            # FileSystemStorage(location='/uploads') # i.e. /media/uploads/<filename>
             fs = FileSystemStorage()
-            # TODO:: make the picture name usnique here
-            fs.save(profile_pic.name, profile_pic)
-            # filename = fs.save(profile_pic.name, profile_pic)
+            filename = fs.save(profile_pic.name, profile_pic)
             # profile_pic_url = fs.url(filename)
 
             try:
@@ -112,7 +114,7 @@ def add_student_save(request):
                 user.student.session_start_year = session_start
                 user.student.session_end_year = session_end
                 user.student.gender = gender
-                user.student.profile_pic = profile_pic.name
+                user.student.profile_pic = filename
                 user.save()
                 messages.success(request, "Successfully Added Student")
                 return redirect("student_management_system_app:add_student")
@@ -180,7 +182,6 @@ def edit_student_save(request):
             if request.FILES.get('profile_pic',False):
                 profile_pic=request.FILES['profile_pic']
                 fs=FileSystemStorage()
-                # TODO:: make the picture name usnique here
                 profile_pic_url = fs.save(profile_pic.name, profile_pic)
                 # filename = fs.save(profile_pic.name, profile_pic)
                 # profile_pic_url = fs.url(filename)
