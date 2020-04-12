@@ -18,7 +18,7 @@ class StudentCreationForm(forms.Form):
         ("Female","Female")
     )
 
-    course=forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
+    course=forms.ModelChoiceField(label="Course",queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
     # course = forms.ModelChoiceField(queryset=Course.objects.all().values_list('course_name', flat=True))
     # course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
     gender=forms.ChoiceField(label="Gender",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
@@ -44,7 +44,7 @@ class StudentEditForm(forms.Form):
         ("Female","Female")
     )
     
-    course=forms.ModelChoiceField(label="Course", queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
+    course=forms.ModelChoiceField(label="Course",queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
     # course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
     gender=forms.ChoiceField(label="Gender",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
     session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))

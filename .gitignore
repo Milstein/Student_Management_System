@@ -31,3 +31,4 @@ __pycache__
 db.sqlite3
 media
 /.venv
+/student_management_system_app/migrations/0001_initial.py

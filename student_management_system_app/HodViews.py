@@ -101,4 +101,4 @@ def add_student_save(request):
                 return HttpResponseRedirect(reverse("student_management_system_app:add_student"))
         else:
             form = StudentCreationForm(request.POST)
-            return render(request, 'student_management_system_app/hod_template/add_student_template.html', {"form": form})
+            return render(request, 'student_management_system_app/hod_template/add_student.html', {"form": form})
