@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
 from student_management_system_app.forms import StudentCreationForm
-from student_management_system_app.models import CustomUser, Course
+from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student
 
 
 def admin_home(request):
@@ -38,6 +37,15 @@ def add_staff_save(request):
             return redirect('student_management_system_app:add_staff')
 
 
+def manage_staff(request):
+    staffs = Staff.objects.all()
+    return render(request, 'student_management_system_app/hod_template/manage_staff.html', {"staffs":staffs})
+
+
+def edit_staff(request, staff_id):
+    return HttpResponse(staff_id)
+
+
 def add_course(request):
     return render(request, 'student_management_system_app/hod_template/add_course.html')
 
@@ -55,6 +63,16 @@ def add_course_save(request):
         except:
             messages.error(request, "Failed To Add Course")
             return redirect('student_management_system_app:add_course')
+
+
+def manage_course(request):
+    courses = Course.objects.all()
+    return render(request, 'student_management_system_app/hod_template/manage_course.html', {"courses":courses})
+
+
+def edit_course(request, course_id):
+    return HttpResponse(course_id)
+
 
 def add_student(request):
     form = StudentCreationForm()
@@ -92,14 +110,57 @@ def add_student_save(request):
                 user.student.session_start_year = session_start
                 user.student.session_end_year = session_end
                 user.student.gender = gender
-                user.student.profile_pic = profile_pic_url
+                user.student.profile_pic = profile_pic.name
                 user.save()
                 messages.success(request, "Successfully Added Student")
-                return HttpResponseRedirect(reverse("student_management_system_app:add_student"))
+                return redirect("student_management_system_app:add_student")
             except Exception as e:
                 messages.error(request, "Failed to Add Student Errors: {}".format(e))
                 # messages.error(request, "Failed to Add Student")
-                return HttpResponseRedirect(reverse("student_management_system_app:add_student"))
+                return redirect("student_management_system_app:add_student")
         else:
             form = StudentCreationForm(request.POST)
             return render(request, 'student_management_system_app/hod_template/add_student.html', {"form": form})
+
+
+def manage_student(request):
+    students = Student.objects.all()
+    return render(request, 'student_management_system_app/hod_template/manage_student.html', {"students":students})
+
+
+def edit_student(request, student_id):
+    return HttpResponse(student_id)
+
+
+def add_subject(request):
+    courses=Course.objects.all()
+    staffs=CustomUser.objects.filter(user_type=2)
+    return render(request,"student_management_system_app/hod_template/add_subject.html",{"staffs":staffs,"courses":courses})
+
+def add_subject_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        subject_name=request.POST.get("subject_name")
+        course_id=request.POST.get("course")
+        course=Course.objects.get(id=course_id)
+        staff_id=request.POST.get("staff")
+        staff=CustomUser.objects.get(id=staff_id)
+
+        try:
+            subject=Subject(subject_name=subject_name,course_id=course,staff_id=staff)
+            subject.save()
+            messages.success(request,"Successfully Added Subject")
+            return redirect("student_management_system_app:add_subject")
+        except:
+            messages.error(request,"Failed to Add Subject")
+            return redirect("student_management_system_app:add_subject")
+
+
+def manage_subject(request):
+    subjects = Subject.objects.all()
+    return render(request, 'student_management_system_app/hod_template/manage_subject.html', {"subjects":subjects})
+
+
+def edit_subject(request, subject_id):
+    return HttpResponse(subject_id)

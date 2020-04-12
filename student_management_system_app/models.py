@@ -43,7 +43,7 @@ class Course(models.Model):
 
 class Subject(models.Model):
     # id=models.AutoField(primary_key=True)
-    subject_name=models.CharField(max_length=255)
+    subject_name=models.CharField(max_length=255,)
     course_id=models.ForeignKey(Course,on_delete=models.CASCADE,default=1)
     staff_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -55,7 +55,7 @@ class Student(models.Model):
     # id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     gender=models.CharField(max_length=255)
-    profile_pic=models.FileField()
+    profile_pic=models.FileField() # models.ImageField(upload_to = "images/", blank=False) 
     address=models.TextField()
     course_id=models.ForeignKey(Course,on_delete=models.DO_NOTHING)
     session_start_year=models.DateField()
