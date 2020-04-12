@@ -20,7 +20,7 @@ Add Course
                     <!-- /.card-header -->
 
                     <!-- form start -->
-                    <form role="form" action="{% url 'student_management_system_app:add_course_save' %}" method="post">
+                    <form role="form" action="{% url 'student_management_system_app:add_course_save' %}" method="POST">
                         {% csrf_token %}
                         <div class="card-body">
                             <div class="form-group">

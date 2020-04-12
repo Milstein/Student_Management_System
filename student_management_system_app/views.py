@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -28,7 +28,7 @@ class HomePageView(LoginRequiredMixin, ListView):
 #     return render(request, 'student_management_system_app/login.html')
 
 
-def dologin(request):
+def login_user(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not allowed!</h2>")
     email = request.POST.get("email")
@@ -51,6 +51,10 @@ def GetUserDetails(request):
     if request.user:
         return HttpResponse("User: " + request.user.email + " User type: " + request.user.user_type)
     return HttpResponse("Please Login First!")
+	
+def logout_user(request):
+    logout(request)
+    return redirect('student_management_system_app:home')
 
 
 class SignupView(CreateView):

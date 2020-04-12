@@ -1,14 +1,18 @@
- <form role="form" action="{{ action_path }}" method="post" enctype="multipart/form-data">
+ <form role="form" action="{{ action_path }}" method="POST" enctype="multipart/form-data">
    {% csrf_token %}
    <div class="card-body">
 
-     {% for field in form %}
-     <div class="form-group">
-       {{ field.errors }}
-       {{ field.label_tag }}
-       {{ field }}
-     </div>
-     {% endfor %}
+    {% for field in form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+      <div class="form-group">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+      {% endif %}
+    {% endfor %}
 
    </div>
    <!-- /.card-body -->
