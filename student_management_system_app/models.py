@@ -40,10 +40,6 @@ class Course(models.Model):
     def __str__(self):
         return self.course_name
 
-    # def get_id(self):
-    #     return self.id
-    
-
 
 class Subject(models.Model):
     # id=models.AutoField(primary_key=True)

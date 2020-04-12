@@ -75,7 +75,7 @@ def add_student_save(request):
             address = form.cleaned_data["address"]
             session_start = form.cleaned_data["session_start"]
             session_end = form.cleaned_data["session_end"]
-            course_id = form.cleaned_data["course"]
+            course_id = form.cleaned_data["course"].id
             gender = form.cleaned_data["gender"]
 
             profile_pic = request.FILES['profile_pic']
@@ -87,8 +87,8 @@ def add_student_save(request):
                 user = CustomUser.objects.create_user(username=username, password=password, email=email,
                                                         last_name=last_name, first_name=first_name, user_type=3)
                 user.student.address = address
-                # course_obj = Course.objects.get(id=course_id)
-                user.student.course_id = course_id
+                course_obj = Course.objects.get(id=course_id)
+                user.student.course_id = course_obj
                 user.student.session_start_year = session_start
                 user.student.session_end_year = session_end
                 user.student.gender = gender
@@ -96,8 +96,9 @@ def add_student_save(request):
                 user.save()
                 messages.success(request, "Successfully Added Student")
                 return HttpResponseRedirect(reverse("student_management_system_app:add_student"))
-            except:
-                messages.error(request, "Failed to Add Student")
+            except Exception as e:
+                messages.error(request, "Failed to Add Student Errors: {}".format(e))
+                # messages.error(request, "Failed to Add Student")
                 return HttpResponseRedirect(reverse("student_management_system_app:add_student"))
         else:
             form = StudentCreationForm(request.POST)
