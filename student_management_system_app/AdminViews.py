@@ -8,11 +8,11 @@ from student_management_system_app.models import CustomUser, Course, Subject, St
 
 
 def admin_home(request):
-    return render(request, 'student_management_system_app/hod_template/main_content.html')
+    return render(request, 'student_management_system_app/admin_template/admin_home.html')
 
 
 def add_staff(request):
-    return render(request, 'student_management_system_app/hod_template/add_staff.html')
+    return render(request, 'student_management_system_app/admin_template/add_staff.html')
 
 
 def add_staff_save(request):
@@ -39,12 +39,12 @@ def add_staff_save(request):
 
 def manage_staffs(request):
     staffs = Staff.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_staffs.html', {"staffs":staffs})
+    return render(request, 'student_management_system_app/admin_template/manage_staffs.html', {"staffs":staffs})
 
 
 def edit_staff(request, staff_id):
     staff = Staff.objects.get(admin=staff_id)
-    return render(request, 'student_management_system_app/hod_template/edit_staff.html', {"staff":staff})
+    return render(request, 'student_management_system_app/admin_template/edit_staff.html', {"staff":staff,"id":staff_id})
 
 
 def edit_staff_save(request):
@@ -79,7 +79,7 @@ def edit_staff_save(request):
 
 def add_student(request):
     form = StudentCreationForm()
-    return render(request, 'student_management_system_app/hod_template/add_student.html', {"form": form})
+    return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
 
 
 def add_student_save(request):
@@ -127,12 +127,12 @@ def add_student_save(request):
                 return redirect("student_management_system_app:add_student")
         else:
             form = StudentCreationForm(request.POST)
-            return render(request, 'student_management_system_app/hod_template/add_student.html', {"form": form})
+            return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
 
 
 def manage_students(request):
     students = Student.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_students.html', {"students":students})
+    return render(request, 'student_management_system_app/admin_template/manage_students.html', {"students":students})
 
 
 def edit_student(request, student_id):
@@ -157,7 +157,7 @@ def edit_student(request, student_id):
         'username': student.admin.username
     }
     
-    return render(request,"student_management_system_app/hod_template/edit_student.html", context)
+    return render(request,"student_management_system_app/admin_template/edit_student.html", context)
 
 
 def edit_student_save(request):
@@ -182,7 +182,7 @@ def edit_student_save(request):
             course_id = form.cleaned_data["course"].id
             gender = form.cleaned_data["gender"]
 
-            if request.FILES.get('profile_pic',False):
+            if request.FILES.get('profile_pic', False):
                 profile_pic=request.FILES['profile_pic']
                 fs=FileSystemStorage()
                 profile_pic_url = fs.save(profile_pic.name, profile_pic)
@@ -227,11 +227,11 @@ def edit_student_save(request):
                 'username': student.admin.username
             }
             
-            return render(request,"student_management_system_app/hod_template/edit_student.html", context)
+            return render(request,"student_management_system_app/admin_template/edit_student.html", context)
             
             
 def add_course(request):
-    return render(request, 'student_management_system_app/hod_template/add_course.html')
+    return render(request, 'student_management_system_app/admin_template/add_course.html')
 
 
 def add_course_save(request):
@@ -251,12 +251,12 @@ def add_course_save(request):
 
 def manage_courses(request):
     courses = Course.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_courses.html', {"courses":courses})
+    return render(request, 'student_management_system_app/admin_template/manage_courses.html', {"courses":courses})
 
 
 def edit_course(request, course_id):    
     course = get_object_or_404(Course, id=course_id)
-    return render(request, 'student_management_system_app/hod_template/edit_course.html', {"course":course})
+    return render(request, 'student_management_system_app/admin_template/edit_course.html', {"course":course,"id":course_id})
 
 
 def edit_course_save(request):
@@ -282,7 +282,7 @@ def edit_course_save(request):
 def add_subject(request):
     courses=Course.objects.all()
     staffs=CustomUser.objects.filter(user_type=2)
-    return render(request,"student_management_system_app/hod_template/add_subject.html",{"staffs":staffs,"courses":courses})
+    return render(request,"student_management_system_app/admin_template/add_subject.html",{"staffs":staffs,"courses":courses})
 
 def add_subject_save(request):
     if request.method!="POST":
@@ -306,7 +306,7 @@ def add_subject_save(request):
 
 def manage_subjects(request):
     subjects = Subject.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_subjects.html', {"subjects":subjects})
+    return render(request, 'student_management_system_app/admin_template/manage_subjects.html', {"subjects":subjects})
 
 
 def edit_subject(request, subject_id):
@@ -319,7 +319,7 @@ def edit_subject(request, subject_id):
                 'staffs': staffs,                
                 'id': subject_id
     }
-    return render(request, 'student_management_system_app/hod_template/edit_subject.html', context)
+    return render(request, 'student_management_system_app/admin_template/edit_subject.html', context)
 
 
 def edit_subject_save(request):

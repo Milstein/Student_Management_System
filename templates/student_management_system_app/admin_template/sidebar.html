@@ -27,8 +27,8 @@
                with font-awesome or any other icon font library -->
                 <li class="nav-header">STAFFS</li>
                 <li class="nav-item">
-                    {% url 'add_staff' as add_staff %}                    
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link {% if request.path == add_staff %} active {% endif %}">
+                    {% url 'student_management_system_app:add_staff' as add_staff %}                    
+                    <a href="{{ add_staff }}" class="nav-link {% if request.path == add_staff %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Add Staff
@@ -36,10 +36,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'manage_staffs' as manage_staffs %}
-                    {% url 'edit_staff' staff_id=id as edit_staff %}
-                    <a href="{% url 'student_management_system_app:manage_staffs' %}"
-                        class="nav-link {% if request.path == manage_staffs %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
+                    {% url 'student_management_system_app:manage_staffs' as manage_staffs %}
+                    {% url 'student_management_system_app:edit_staff' staff_id=id as edit_staff %}
+                    <a href="{{ manage_staffs }}"
+                        class="nav-link {% if request.path == manage_staffs %}active{% endif %} {% if request.path == edit_staff %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Manage Staff
@@ -49,9 +49,9 @@
 
                 <li class="nav-header">STUDENTS</li>
                 <li class="nav-item">
-                    {% url 'add_student' as add_student %}
-                    <a href="{% url 'student_management_system_app:add_student' %}"
-                        class="nav-link {% if request.path == add_student %} active {% endif %}">
+                    {% url 'student_management_system_app:add_student' as add_student %}
+                    <a href="{{ add_student }}"
+                        class="nav-link {% if request.path == add_student %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Add Student
@@ -59,10 +59,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'manage_students' as manage_students %}
-                    {% url 'edit_student' student_id=id as edit_student %}
-                    <a href="{% url 'student_management_system_app:manage_students' %}"
-                        class="nav-link {% if request.path == manage_students %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
+                    {% url 'student_management_system_app:manage_students' as manage_students %}
+                    {% url 'student_management_system_app:edit_student' student_id=id as edit_student %}
+                    <a href="{{ manage_students }}"
+                        class="nav-link {% if request.path == manage_students %}active{% endif %} {% if request.path == edit_student %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Manage Students
@@ -72,9 +72,9 @@
 
                 <li class="nav-header">COURSES</li>
                 <li class="nav-item">
-                    {% url 'add_course' as add_course %}
-                    <a href="{% url 'student_management_system_app:add_course' %}"
-                        class="nav-link {% if request.path == add_course %} active {% endif %}">
+                    {% url 'student_management_system_app:add_course' as add_course %}
+                    <a href="{{ add_course }}"
+                        class="nav-link {% if request.path == add_course %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Add Course
@@ -82,10 +82,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'manage_courses' as manage_courses %}
-                    {% url 'edit_course' course_id=id as edit_course %}
-                    <a href="{% url 'student_management_system_app:manage_courses' %}"
-                        class="nav-link {% if request.path == manage_courses %} active {% endif %} {% if request.path == edit_course %} active {% endif %}">
+                    {% url 'student_management_system_app:manage_courses' as manage_courses %}
+                    {% url 'student_management_system_app:edit_course' course_id=id as edit_course %}
+                    <a href="{{ manage_courses }}"
+                        class="nav-link {% if request.path == manage_courses %}active{% endif %} {% if request.path == edit_course %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Manage Course
@@ -95,9 +95,9 @@
 
                 <li class="nav-header">SUBJECTS</li>
                 <li class="nav-item">
-                    {% url 'add_subject' as add_subject %}
-                    <a href="{% url 'student_management_system_app:add_subject' %}"
-                        class="nav-link {% if request.path == add_subject %} active {% endif %}">
+                    {% url 'student_management_system_app:add_subject' as add_subject %}
+                    <a href="{{ add_subject }}"
+                        class="nav-link {% if request.path == add_subject %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Add Subject
@@ -105,10 +105,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'manage_subjects' as manage_subjects %}
-                    {% url 'edit_subject' subject_id=id as edit_subject %}
-                    <a href="{% url 'student_management_system_app:manage_subjects' %}"
-                        class="nav-link {% if request.path == manage_subjects %} active {% endif %} {% if request.path == edit_subject %} active {% endif %} ">
+                    {% url 'student_management_system_app:manage_subjects' as manage_subjects %}
+                    {% url 'student_management_system_app:edit_subject' subject_id=id as edit_subject %}
+                    <a href="{{ manage_subjects }}"
+                        class="nav-link {% if request.path == manage_subjects %}active{% endif %} {% if request.path == edit_subject %}active{% endif %} ">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Manage Subject
@@ -118,7 +118,7 @@
 
                 {% comment %} <li class="nav-header">ATTENDANCE REPORTS</li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             View Attendance
@@ -129,7 +129,7 @@
 
                 <li class="nav-header">FEEDBACKS</li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Student Feedback
@@ -138,7 +138,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Staff Feedback
@@ -149,7 +149,7 @@
 
                 <li class="nav-header">LEAVES</li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Student Leave
@@ -158,7 +158,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'add_staff' %}" class="nav-link">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Staff Leave

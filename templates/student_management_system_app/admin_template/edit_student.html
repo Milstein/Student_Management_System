@@ -1,4 +1,4 @@
-{% extends 'student_management_system_app/hod_template/base_template.html' %}
+{% extends 'student_management_system_app/admin_template/base_template.html' %}
 
 {% block title %}Edit Student{% endblock title %}
 
@@ -19,7 +19,7 @@ Edit Student | Username : {{ username }} | #ID : {{ id }}
           <!-- /.card-header -->
           <!-- form start -->
           {% url 'student_management_system_app:edit_student_save' as action_path %}
-          {% include 'student_management_system_app/hod_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Save Student" %}
+          {% include 'student_management_system_app/admin_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Save Student" %}
         </div>
         <!-- /.card -->
       </div>

@@ -1,4 +1,4 @@
-{% extends 'student_management_system_app/hod_template/base_template.html' %}
+{% extends 'student_management_system_app/admin_template/base_template.html' %}
 
 {% block title %}Add Student{% endblock title %}
 
@@ -21,7 +21,7 @@ Add Student
 
           <!-- form start -->
           {% url 'student_management_system_app:add_student_save' as action_path %}
-          {% include 'student_management_system_app/hod_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Add Student" %}
+          {% include 'student_management_system_app/admin_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Add Student" %}
         </div>
         <!-- /.card -->
       </div>

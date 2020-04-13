@@ -24,8 +24,9 @@ class HomePageView(LoginRequiredMixin, ListView):
     #     return students.filter(manager=self.request.user)
     #     # return Student.objects.order_by('-date_added')[:5]
 
-# def showLoginPage(request):
-#     return render(request, 'student_management_system_app/login.html')
+
+def show_login(request):
+    return render(request, 'registration/login.html')
 
 
 def login_user(request):
@@ -44,7 +45,7 @@ def login_user(request):
             return redirect('student_management_system_app:student_home')
     else:
         messages.error(request, "Invalid Login Credentials!")
-        return redirect('student_management_system_app:home')
+        return redirect('student_management_system_app:show_login')
 
 
 def GetUserDetails(request):
@@ -54,10 +55,10 @@ def GetUserDetails(request):
 	
 def logout_user(request):
     logout(request)
-    return redirect('student_management_system_app:home')
+    return redirect('student_management_system_app:show_login')
 
 
 class SignupView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/signup.html'
-    success_url = reverse_lazy('student_management_system_app:home')
+    success_url = reverse_lazy('student_management_system_app:show_login')

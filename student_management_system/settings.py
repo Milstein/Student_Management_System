@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'student_management_system_app.LoginCheckMiddleWare.LoginCheckMiddleWare',
 ]
 
 ROOT_URLCONF = 'student_management_system.urls'
@@ -154,4 +155,4 @@ AUTHENTICATION_BACKENDS=["student_management_system_app.EmailBackEnd.EmailBackEn
 # for authentication
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'student_management_system_app:home'
+LOGIN_REDIRECT_URL = 'student_management_system_app:login_user'

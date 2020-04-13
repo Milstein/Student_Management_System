@@ -1,9 +1,9 @@
-{% extends 'student_management_system_app/hod_template/base_template.html' %}
+{% extends 'student_management_system_app/admin_template/base_template.html' %}
 
-{% block title %}Manage Staff{% endblock title %}
+{% block title %}Manage Course{% endblock title %}
 
 {% block page_title %}
-Manage Staff
+Manage Course
 {% endblock page_title %}
 
 {% block main_content %}
@@ -15,7 +15,7 @@ Manage Staff
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Staff Details</h3>
+            <h3 class="card-title">Course Details</h3>
 
             <div class="card-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
@@ -33,38 +33,27 @@ Manage Staff
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>User Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Last Login</th>
-                  <th>Date Joined</th>
+                  <th>Course Name</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {% if staffs %}
-                  {% for staff in staffs %}
+                {% if courses %}
+                  {% for course in courses %}
                   <tr>
-                    <td>{{ staff.admin.id }}</td>
-                    <td>{{ staff.admin.first_name }}</td>
-                    <td>{{ staff.admin.last_name }}</td>
-                    <td>{{ staff.admin.username }}</td>
-                    <td>{{ staff.admin.email }}</td>
-                    <td>{{ staff.address }}</td>
-                    <td>{{ staff.admin.last_login }}</td>
-                    <td>{{ staff.admin.date_joined }}</td>
-                    <td><a href="{% url 'student_management_system_app:edit_staff' staff.admin.id %}" class="btn btn-success">Edit</a></td>
+                    <td>{{ course.id }}</td>
+                    <td>{{ course.course_name }}</td>
+                    <td><a href="{% url 'student_management_system_app:edit_course' course.id %}"
+                        class="btn btn-success">Edit</a></td>
                   </tr>
                   {% endfor %}
                 {% else %}
                   <tr>
-                      <td colspan="9">
+                      <td colspan="3">
                         <div class="alert alert-warning alert-dismissible">
                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                           <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
-                          You have not saved any staffs yet!
+                          You have not saved any courses yet!
                         </div>
                       </td>
                   </tr>

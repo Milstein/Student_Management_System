@@ -37,10 +37,9 @@
           <a href="#" class="nav-link">Contact</a>
         </li> {% endcomment %}
       </ul>
-      <h4 style="margin-left: 10px;margin-top: 5px;">Student Management Sytem HOD Login</h4>
-
+    <h4 style="margin-left: 10px;margin-top: 5px;">Student Management Sytem | Student Panel</h4>
       <!-- Right navbar links -->
-      {% comment %} {% include 'student_management_system_app/hod_template/notification.html' %} {% endcomment %}
+      {% comment %} {% include 'student_management_system_app/student_template/notification.html' %} {% endcomment %}
       <ul class="navbar-nav ml-auto">
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
@@ -136,13 +135,15 @@
           </a>
         </li>
       </ul>
-    </nav>
-    <!-- /.navbar -->
 
-    <!-- Main Sidebar Container -->
-    {% include 'student_management_system_app/hod_template/sidebar.html' with user=user id=id %}
+    <!-- Right navbar links -->
+  </nav>
+  <!-- /.navbar -->
 
-    <!-- Content Wrapper. Contains page content -->
+  <!-- Main Sidebar Container -->
+    {% include 'student_management_system_app/student_template/sidebar.html' with user=user id=id %}
+
+  <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <div class="content-header">
@@ -156,7 +157,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{% url 'student_management_system_app:admin_home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'student_management_system_app:student_home' %}">Home</a></li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -173,7 +174,7 @@
     <!-- /.content-wrapper -->
 
     <!-- Main Footer -->
-    {% include 'student_management_system_app/hod_template/footer.html' %}
+    {% include 'student_management_system_app/partials/_footer.html' %}
   </div>
   <!-- ./wrapper -->
 

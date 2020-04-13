@@ -7,6 +7,4 @@ from student_management_system_app.models import CustomUser
 class UserModel(UserAdmin):
     pass
 
-
-admin.register(CustomUser, UserModel)
-
+admin.site.register(CustomUser,UserModel)
