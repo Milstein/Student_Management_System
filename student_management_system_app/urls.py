@@ -12,8 +12,8 @@ app_name = 'student_management_system_app'
 
 urlpatterns = [
     # path('demo', views.showDemoPage),    
-    # path('', views.HomePageView.as_view(), name='home'),
-    path('', views.show_login, name='show_login'),
+    path('', views.HomePageView.as_view(), name='home'),
+    path('show_login', views.show_login, name='show_login'),
     path('login_user', views.login_user, name='login_user'),
     path('get_user_details', views.GetUserDetails, name='userdetails'),
 	path('logout_user', views.logout_user, name='logout_user'),

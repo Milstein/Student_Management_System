@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,14 +8,17 @@ from student_management_system_app.forms import StudentCreationForm, StudentEdit
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student
 
 
+@login_required
 def admin_home(request):
     return render(request, 'student_management_system_app/admin_template/admin_home.html')
 
 
+@login_required
 def add_staff(request):
     return render(request, 'student_management_system_app/admin_template/add_staff.html')
 
 
+@login_required
 def add_staff_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -37,16 +41,19 @@ def add_staff_save(request):
             return redirect('student_management_system_app:add_staff')
 
 
+@login_required
 def manage_staffs(request):
     staffs = Staff.objects.all()
     return render(request, 'student_management_system_app/admin_template/manage_staffs.html', {"staffs":staffs})
 
 
+@login_required
 def edit_staff(request, staff_id):
     staff = Staff.objects.get(admin=staff_id)
     return render(request, 'student_management_system_app/admin_template/edit_staff.html', {"staff":staff,"id":staff_id})
 
 
+@login_required
 def edit_staff_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -77,11 +84,13 @@ def edit_staff_save(request):
             return redirect('student_management_system_app:edit_staff', staff_id)
 
 
+@login_required
 def add_student(request):
     form = StudentCreationForm()
     return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
 
 
+@login_required
 def add_student_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -130,11 +139,13 @@ def add_student_save(request):
             return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
 
 
+@login_required
 def manage_students(request):
     students = Student.objects.all()
     return render(request, 'student_management_system_app/admin_template/manage_students.html', {"students":students})
 
 
+@login_required
 def edit_student(request, student_id):
     # request.session['student_id']=student_id
     student = get_object_or_404(Student, admin=student_id)
@@ -160,6 +171,7 @@ def edit_student(request, student_id):
     return render(request,"student_management_system_app/admin_template/edit_student.html", context)
 
 
+@login_required
 def edit_student_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -228,12 +240,14 @@ def edit_student_save(request):
             }
             
             return render(request,"student_management_system_app/admin_template/edit_student.html", context)
-            
-            
+
+
+@login_required
 def add_course(request):
     return render(request, 'student_management_system_app/admin_template/add_course.html')
 
 
+@login_required
 def add_course_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -249,16 +263,19 @@ def add_course_save(request):
             return redirect('student_management_system_app:add_course')
 
 
+@login_required
 def manage_courses(request):
     courses = Course.objects.all()
     return render(request, 'student_management_system_app/admin_template/manage_courses.html', {"courses":courses})
 
 
+@login_required
 def edit_course(request, course_id):    
     course = get_object_or_404(Course, id=course_id)
     return render(request, 'student_management_system_app/admin_template/edit_course.html', {"course":course,"id":course_id})
 
 
+@login_required
 def edit_course_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -279,11 +296,14 @@ def edit_course_save(request):
             return redirect('student_management_system_app:edit_course', course_id)
 
 
+@login_required
 def add_subject(request):
     courses=Course.objects.all()
     staffs=CustomUser.objects.filter(user_type=2)
     return render(request,"student_management_system_app/admin_template/add_subject.html",{"staffs":staffs,"courses":courses})
 
+
+@login_required
 def add_subject_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -304,11 +324,13 @@ def add_subject_save(request):
             return redirect("student_management_system_app:add_subject")
 
 
+@login_required
 def manage_subjects(request):
     subjects = Subject.objects.all()
     return render(request, 'student_management_system_app/admin_template/manage_subjects.html', {"subjects":subjects})
 
 
+@login_required
 def edit_subject(request, subject_id):
     subject = get_object_or_404(Subject, id=subject_id)
     courses=Course.objects.all()
@@ -322,6 +344,7 @@ def edit_subject(request, subject_id):
     return render(request, 'student_management_system_app/admin_template/edit_subject.html', context)
 
 
+@login_required
 def edit_subject_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")

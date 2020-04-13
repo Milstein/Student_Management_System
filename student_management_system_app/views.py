@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -45,20 +46,23 @@ def login_user(request):
             return redirect('student_management_system_app:student_home')
     else:
         messages.error(request, "Invalid Login Credentials!")
-        return redirect('student_management_system_app:show_login')
+        return redirect('student_management_system_app:home')
 
 
+@login_required
 def GetUserDetails(request):
     if request.user:
         return HttpResponse("User: " + request.user.email + " User type: " + request.user.user_type)
     return HttpResponse("Please Login First!")
-	
+
+
+@login_required
 def logout_user(request):
     logout(request)
-    return redirect('student_management_system_app:show_login')
+    return redirect('student_management_system_app:home')
 
 
 class SignupView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/signup.html'
-    success_url = reverse_lazy('student_management_system_app:show_login')
+    success_url = reverse_lazy('student_management_system_app:home')

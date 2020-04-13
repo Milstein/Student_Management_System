@@ -155,4 +155,4 @@ AUTHENTICATION_BACKENDS=["student_management_system_app.EmailBackEnd.EmailBackEn
 # for authentication
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'student_management_system_app:login_user'
+LOGIN_REDIRECT_URL = 'student_management_system_app:home'
