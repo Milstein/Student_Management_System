@@ -37,9 +37,9 @@ def add_staff_save(request):
             return redirect('student_management_system_app:add_staff')
 
 
-def manage_staff(request):
+def manage_staffs(request):
     staffs = Staff.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_staff.html', {"staffs":staffs})
+    return render(request, 'student_management_system_app/hod_template/manage_staffs.html', {"staffs":staffs})
 
 
 def edit_staff(request, staff_id):
@@ -52,6 +52,9 @@ def edit_staff_save(request):
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         staff_id = request.POST.get("staff_id")
+        if staff_id == None:
+            return redirect("student_management_system_app:manage_staffs")
+
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         username = request.POST.get("username")
@@ -127,9 +130,9 @@ def add_student_save(request):
             return render(request, 'student_management_system_app/hod_template/add_student.html', {"form": form})
 
 
-def manage_student(request):
+def manage_students(request):
     students = Student.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_student.html', {"students":students})
+    return render(request, 'student_management_system_app/hod_template/manage_students.html', {"students":students})
 
 
 def edit_student(request, student_id):
@@ -162,9 +165,9 @@ def edit_student_save(request):
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         # student_id=request.session.get("student_id")
-        student_id = request.POST["student_id"]
+        student_id = request.POST.get("student_id")
         if student_id == None:
-            return redirect("student_management_system_app:manage_student")
+            return redirect("student_management_system_app:manage_students")
 
         form=StudentEditForm(request.POST, request.FILES)
         if form.is_valid():
@@ -236,7 +239,7 @@ def add_course_save(request):
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         course = request.POST.get("course")
-        try:
+        try:            
             course_model = Course(course_name=course)
             course_model.save()
             messages.success(request, "Successfully Added Course")
@@ -246,13 +249,34 @@ def add_course_save(request):
             return redirect('student_management_system_app:add_course')
 
 
-def manage_course(request):
+def manage_courses(request):
     courses = Course.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_course.html', {"courses":courses})
+    return render(request, 'student_management_system_app/hod_template/manage_courses.html', {"courses":courses})
 
 
-def edit_course(request, course_id):
-    return HttpResponse(course_id)
+def edit_course(request, course_id):    
+    course = get_object_or_404(Course, id=course_id)
+    return render(request, 'student_management_system_app/hod_template/edit_course.html', {"course":course})
+
+
+def edit_course_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        course_id = request.POST.get("course_id")
+        if course_id == None:
+            return redirect("student_management_system_app:manage_courses")
+
+        course = request.POST.get("course")
+        try:
+            course_model = Course.objects.get(id=course_id)
+            course_model.course_name=course
+            course_model.save()
+            messages.success(request, "Successfully Edited Course")
+            return redirect('student_management_system_app:edit_course', course_id)
+        except Exception as e:
+            messages.error(request, "Failed To Edit Course Errors: {}".format(e))
+            return redirect('student_management_system_app:edit_course', course_id)
 
 
 def add_subject(request):
@@ -280,10 +304,47 @@ def add_subject_save(request):
             return redirect("student_management_system_app:add_subject")
 
 
-def manage_subject(request):
+def manage_subjects(request):
     subjects = Subject.objects.all()
-    return render(request, 'student_management_system_app/hod_template/manage_subject.html', {"subjects":subjects})
+    return render(request, 'student_management_system_app/hod_template/manage_subjects.html', {"subjects":subjects})
 
 
 def edit_subject(request, subject_id):
-    return HttpResponse(subject_id)
+    subject = get_object_or_404(Subject, id=subject_id)
+    courses=Course.objects.all()
+    staffs=CustomUser.objects.filter(user_type=2)
+    context = {
+                'subject': subject,
+                'courses': courses,
+                'staffs': staffs,                
+                'id': subject_id
+    }
+    return render(request, 'student_management_system_app/hod_template/edit_subject.html', context)
+
+
+def edit_subject_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        subject_id = request.POST.get("subject_id")
+        if subject_id == None:
+            return redirect("student_management_system_app:manage_subjects")
+
+        subject_name=request.POST.get("subject_name")
+        staff_id=request.POST.get("staff")
+        course_id=request.POST.get("course")
+
+        try:
+            subject=Subject.objects.get(id=subject_id)
+            subject.subject_name=subject_name
+            staff=CustomUser.objects.get(id=staff_id)
+            subject.staff_id=staff
+            course=Course.objects.get(id=course_id)
+            subject.course_id=course
+            subject.save()
+
+            messages.success(request,"Successfully Edited Subject")
+            return redirect('student_management_system_app:edit_subject', subject_id)
+        except Exception as e:
+            messages.error(request, "Failed To Edit Subject Errors: {}".format(e))
+            return redirect('student_management_system_app:edit_subject', subject_id)

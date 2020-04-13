@@ -55,7 +55,7 @@ class Student(models.Model):
     # id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     gender=models.CharField(max_length=255)
-    profile_pic=models.FileField() # models.ImageField(upload_to = "images/", blank=False) 
+    profile_pic=models.FileField() # models.ImageField(upload_to = "images/", blank=False)  or FileField(upload_to='images/')
     address=models.TextField()
     course_id=models.ForeignKey(Course,on_delete=models.DO_NOTHING)
     session_start_year=models.DateField()
