@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'student_management_system_app.apps.StudentManagementSystemAppConfig'
+    'student_management_system_app.apps.StudentManagementSystemAppConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,6 @@ AUTHENTICATION_BACKENDS=["student_management_system_app.EmailBackEnd.EmailBackEn
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'student_management_system_app:home'
+
+# Crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
