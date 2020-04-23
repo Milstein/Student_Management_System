@@ -1,11 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.views import View
+from django.views.generic import CreateView, UpdateView, DeleteView
 
-from student_management_system_app.forms import StudentCreationForm, StudentEditForm
-from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student
+from student_management_system_app.forms import StudentCreationForm, StudentEditForm, SessionYearForm
+from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear
 
 
 @login_required
@@ -85,161 +89,79 @@ def edit_staff_save(request):
 
 
 @login_required
-def add_student(request):
-    form = StudentCreationForm()
-    return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
+def manage_session_years(request):
+    session_years = SessionYear.objects.all()
+    return render(request, 'student_management_system_app/admin_template/manage_session_years.html', {"session_years":session_years})
 
 
-@login_required
-def add_student_save(request):
-    if request.method != "POST":
-        return HttpResponse("<h2>Method Not Allowed</h2>")
-    else:
-        form = StudentCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
-            username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            address = form.cleaned_data["address"]
-            session_start = form.cleaned_data["session_start"]
-            session_end = form.cleaned_data["session_end"]
-            course_id = form.cleaned_data["course"].id
-            gender = form.cleaned_data["gender"]
-
-            profile_pic = request.FILES['profile_pic']
-
-            # FileSystemStorage fallbacks to MEDIA_ROOT when location
-            # is empty, so we restore the empty value.
-            # FileSystemStorage(location='/uploads') # i.e. /media/uploads/<filename>
-            fs = FileSystemStorage()
-            filename = fs.save(profile_pic.name, profile_pic)
-            # profile_pic_url = fs.url(filename)
-
-            try:
-                user = CustomUser.objects.create_user(username=username, password=password, email=email,
-                                                        last_name=last_name, first_name=first_name, user_type=3)
-                user.student.address = address
-                course = Course.objects.get(id=course_id)
-                user.student.course_id = course
-                user.student.session_start_year = session_start
-                user.student.session_end_year = session_end
-                user.student.gender = gender
-                user.student.profile_pic = filename
-                user.save()
-                messages.success(request, "Successfully Added Student")
-                return redirect("student_management_system_app:add_student")
-            except Exception as e:
-                messages.error(request, "Failed to Add Student Errors: {}".format(e))
-                # messages.error(request, "Failed to Add Student")
-                return redirect("student_management_system_app:add_student")
-        else:
-            form = StudentCreationForm(request.POST)
-            return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
+########## Using Custom Form for adding - need save function separately to do creation ##########
+# @login_required()
+# def add_session_year(request):
+#     form = SessionYearForm()
+#     return render(request, 'student_management_system_app/admin_template/add_session_year.html', {
+#         'form': form
+#     })
 
 
-@login_required
-def manage_students(request):
-    students = Student.objects.all()
-    return render(request, 'student_management_system_app/admin_template/manage_students.html', {"students":students})
+########## Using Custom Form for adding ##########
+# class SessionYearCreateView(LoginRequiredMixin, View):
+#     def get(self, request):
+#         form = SessionYearForm()
+#         return render(request, 'student_management_system_app/admin_template/add_session_year.html', {
+#             'form': form
+#         })
 
 
-@login_required
-def edit_student(request, student_id):
-    # request.session['student_id']=student_id
-    student = get_object_or_404(Student, admin=student_id)
-    # student=Student.objects.get(admin=student_id)
+#     def post(self, request):
+#         form = SessionYearForm(request.POST)
+#         if form.is_valid():
+#             session_start=form.cleaned_data['session_start']
+#             session_end=form.cleaned_data['session_end']
 
-    form=StudentEditForm(initial={'student_id': student_id})
-    form.fields['email'].initial=student.admin.email
-    form.fields['first_name'].initial=student.admin.first_name
-    form.fields['last_name'].initial=student.admin.last_name
-    form.fields['username'].initial=student.admin.username
-    form.fields['address'].initial=student.address
-    form.fields['course'].initial=student.course_id
-    form.fields['gender'].initial=student.gender
-    form.fields['session_start'].initial=student.session_start_year
-    form.fields['session_end'].initial=student.session_end_year
+#             try:
+#                 session_year=SessionYear(session_start=session_start, session_end=session_end)
+#                 session_year.save()
 
-    context = {
-        'form': form,
-        'id': student_id,
-        'username': student.admin.username
-    }
-    
-    return render(request,"student_management_system_app/admin_template/edit_student.html", context)
+#                 messages.success(request,"Successfully Added Session Year")
+#                 return redirect(reverse('student_management_system_app:add_session_year'))
+#             except Exception as e:
+#                 messages.error(request, "Failed To Add Session Year Erros: {}".format(e))
+#                 return redirect(reverse('student_management_system_app:add_session_year'))
+
+########## Using Django's in-built Model CreateView - so less code to write all managed by Django ##########
+class SessionYearCreateView(LoginRequiredMixin, CreateView):
+    model = SessionYear
+    template_name ='student_management_system_app/admin_template/add_session_year.html'
+    fields = ['session_start', 'session_end']
+    # success_url = '/'
+
+    def form_valid(self, form):
+        form.save(commit=True)
+        messages.success(self.request, "Successfully Added Session Year")
+        return redirect('student_management_system_app:add_session_year')
 
 
-@login_required
-def edit_student_save(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Not Allowed</h2>")
-    else:
-        # student_id=request.session.get("student_id")
-        student_id = request.POST.get("student_id")
-        if student_id == None:
-            return redirect("student_management_system_app:manage_students")
+class SessionYearUpdateView(LoginRequiredMixin, UpdateView):
+    model = SessionYear
+    template_name ='student_management_system_app/admin_template/edit_session_year.html'
+    fields = ['session_start', 'session_end']
+    # success_url = '/'
 
-        form=StudentEditForm(request.POST, request.FILES)
-        if form.is_valid():
-            student_id=form.cleaned_data["student_id"]
-            first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
-            username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            address = form.cleaned_data["address"]
-            session_start = form.cleaned_data["session_start"]
-            session_end = form.cleaned_data["session_end"]
-            course_id = form.cleaned_data["course"].id
-            gender = form.cleaned_data["gender"]
+    def form_valid(self, form):
+        instance = form.save()
+        messages.success(self.request, "Successfully Edited Session Year")
+        # return redirect('student_management_system_app:manage_session_years')
+        return redirect('student_management_system_app:edit_session_year', instance.pk)
 
-            if request.FILES.get('profile_pic', False):
-                profile_pic=request.FILES['profile_pic']
-                fs=FileSystemStorage()
-                profile_pic_url = fs.save(profile_pic.name, profile_pic)
-                # filename = fs.save(profile_pic.name, profile_pic)
-                # profile_pic_url = fs.url(filename)
-            else:
-                profile_pic_url=None
 
-            try:
-                user=CustomUser.objects.get(id=student_id)
-                user.first_name=first_name
-                user.last_name=last_name
-                user.username=username
-                user.email=email
-                user.save()
+class SessionYearDeleteView(LoginRequiredMixin, DeleteView):
+    model = SessionYear
+    template_name = 'student_management_system_app/admin_template/delete_session_year.html'
+    success_url = reverse_lazy('student_management_system_app:manage_session_years')
 
-                student=Student.objects.get(admin=student_id)
-                student.address=address
-                student.session_start_year=session_start
-                student.session_end_year=session_end
-                student.gender=gender
-
-                course=Course.objects.get(id=course_id)
-                student.course_id=course
-                if profile_pic_url!=None:
-                    student.profile_pic=profile_pic_url
-                student.save()
-                # del request.session['student_id']
-                messages.success(request,"Successfully Edited Student")
-                return redirect("student_management_system_app:edit_student", student_id=student_id)
-            except Exception as e:
-                messages.error(request,"Failed to Edit Student! Errors: {}".format(e))
-                return redirect("student_management_system_app:edit_student", student_id=student_id)
-        else:
-            form=StudentEditForm(request.POST, initial={'student_id': student_id})
-            # student=Students.objects.get(admin=student_id)
-            student = get_object_or_404(Student, admin=student_id)
-
-            context = {
-                'form': form,
-                'id': student_id,
-                'username': student.admin.username
-            }
-            
-            return render(request,"student_management_system_app/admin_template/edit_student.html", context)
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Successfully Deleted Session Year")
+        return super().delete(self, request, *args, **kwargs)
 
 
 @login_required
@@ -293,6 +215,7 @@ def edit_course_save(request):
             return redirect('student_management_system_app:edit_course', course_id)
         except Exception as e:
             messages.error(request, "Failed To Edit Course Errors: {}".format(e))
+            # return redirect(reverse('student_management_system_app:edit_course', kwargs={'course_id':course_id}))
             return redirect('student_management_system_app:edit_course', course_id)
 
 
@@ -350,7 +273,7 @@ def edit_subject_save(request):
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         subject_id = request.POST.get("subject_id")
-        if subject_id == None:
+        if subject_id is None:
             return redirect("student_management_system_app:manage_subjects")
 
         subject_name=request.POST.get("subject_name")
@@ -371,3 +294,165 @@ def edit_subject_save(request):
         except Exception as e:
             messages.error(request, "Failed To Edit Subject Errors: {}".format(e))
             return redirect('student_management_system_app:edit_subject', subject_id)
+
+    
+@login_required
+def add_student(request):
+    form = StudentCreationForm()
+    return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
+
+
+@login_required
+def add_student_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        form = StudentCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            address = form.cleaned_data["address"]
+
+            session_year_id = form.cleaned_data["session_year_id"].id
+
+            course_id = form.cleaned_data["course"].id
+            gender = form.cleaned_data["gender"]
+
+            profile_pic = request.FILES['profile_pic']
+
+            # FileSystemStorage fallbacks to MEDIA_ROOT when location
+            # is empty, so we restore the empty value.
+            # FileSystemStorage(location='/uploads') # i.e. /media/uploads/<filename>
+            fs = FileSystemStorage()
+            filename = fs.save(profile_pic.name, profile_pic)
+            # profile_pic_url = fs.url(filename)
+
+            try:
+                user = CustomUser.objects.create_user(username=username, password=password, email=email,
+                                                        last_name=last_name, first_name=first_name, user_type=3)
+                user.student.address = address
+                course = Course.objects.get(id=course_id)
+                user.student.course_id = course
+
+                session_year = SessionYear.objects.get(id=session_year_id)
+                user.student.session_year_id = session_year
+
+                user.student.gender = gender
+                user.student.profile_pic = filename
+                user.save()
+                messages.success(request, "Successfully Added Student")
+                return redirect("student_management_system_app:add_student")
+            except Exception as e:
+                messages.error(request, "Failed to Add Student Errors: {}".format(e))
+                # messages.error(request, "Failed to Add Student")
+                return redirect("student_management_system_app:add_student")
+        else:
+            form = StudentCreationForm(request.POST)
+            return render(request, 'student_management_system_app/admin_template/add_student.html', {"form": form})
+
+
+@login_required
+def manage_students(request):
+    students = Student.objects.all()
+    return render(request, 'student_management_system_app/admin_template/manage_students.html', {"students":students})
+
+
+@login_required
+def edit_student(request, student_id):
+    # request.session['student_id']=student_id
+    student = get_object_or_404(Student, admin=student_id)
+    # student=Student.objects.get(admin=student_id)
+
+    form=StudentEditForm(initial={'student_id': student_id})
+    form.fields['email'].initial=student.admin.email
+    form.fields['first_name'].initial=student.admin.first_name
+    form.fields['last_name'].initial=student.admin.last_name
+    form.fields['username'].initial=student.admin.username
+    form.fields['address'].initial=student.address
+    form.fields['course'].initial=student.course_id
+    form.fields['gender'].initial=student.gender
+
+    form.fields['session_year_id'].initial=student.session_year_id
+
+    context = {
+        'form': form,
+        'id': student_id,
+        'username': student.admin.username
+    }
+    
+    return render(request,"student_management_system_app/admin_template/edit_student.html", context)
+
+
+@login_required
+def edit_student_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        # student_id=request.session.get("student_id")
+        student_id = request.POST.get("student_id")
+        if student_id == None:
+            return redirect("student_management_system_app:manage_students")
+
+        form=StudentEditForm(request.POST, request.FILES)
+        if form.is_valid():
+            student_id=form.cleaned_data["student_id"]
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            address = form.cleaned_data["address"]
+            session_year_id = form.cleaned_data["session_year_id"].id
+            course_id = form.cleaned_data["course"].id
+            gender = form.cleaned_data["gender"]
+
+            if request.FILES.get('profile_pic', False):
+                profile_pic=request.FILES['profile_pic']
+                fs=FileSystemStorage()
+                profile_pic_url = fs.save(profile_pic.name, profile_pic)
+                # filename = fs.save(profile_pic.name, profile_pic)
+                # profile_pic_url = fs.url(filename)
+            else:
+                profile_pic_url=None
+
+            try:
+                user=CustomUser.objects.get(id=student_id)
+                user.first_name=first_name
+                user.last_name=last_name
+                user.username=username
+                user.email=email
+                user.save()
+
+                student=Student.objects.get(admin=student_id)
+                student.address=address
+                
+                session_year = SessionYear.objects.get(id=session_year_id)
+                user.student.session_year_id = session_year
+
+                student.gender=gender
+
+                course=Course.objects.get(id=course_id)
+                student.course_id=course
+                if profile_pic_url is not None:
+                    student.profile_pic=profile_pic_url
+                student.save()
+                # del request.session['student_id']
+                messages.success(request,"Successfully Edited Student")
+                return redirect("student_management_system_app:edit_student", student_id=student_id)
+            except Exception as e:
+                messages.error(request,"Failed to Edit Student! Errors: {}".format(e))
+                return redirect("student_management_system_app:edit_student", student_id=student_id)
+        else:
+            form=StudentEditForm(request.POST, initial={'student_id': student_id})
+            # student=Students.objects.get(admin=student_id)
+            student = get_object_or_404(Student, admin=student_id)
+
+            context = {
+                'form': form,
+                'id': student_id,
+                'username': student.admin.username
+            }
+            
+            return render(request,"student_management_system_app/admin_template/edit_student.html", context)

@@ -1,6 +1,7 @@
 from django import forms
 
-from student_management_system_app.models import Course
+from student_management_system_app.models import Course, SessionYear
+
 
 class DateInput(forms.DateInput):
     input_type = "date"
@@ -22,12 +23,15 @@ class StudentCreationForm(forms.Form):
     # course = forms.ModelChoiceField(queryset=Course.objects.all().values_list('course_name', flat=True))
     # course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
     gender=forms.ChoiceField(label="Gender",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
-    session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
-    session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
+    
+    session_year_id=forms.ModelChoiceField(label="Session Year",queryset=SessionYear.objects.all(),empty_label="--- Select Session Year ---",widget=forms.Select(attrs={"class":"form-control"}))
+    # session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
+    # session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
+    
     profile_pic=forms.FileField(label="Profile Picture",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
 
 class StudentEditForm(forms.Form):
-    student_id=forms.CharField(widget = forms.HiddenInput(attrs={"readonly":"readonly"}), required = False)
+    student_id=forms.CharField(widget = forms.HiddenInput(attrs={"readonly":"readonly"}))
     email=forms.EmailField(label="Email",max_length=50,widget=forms.EmailInput(attrs={"class":"form-control"}))
     first_name=forms.CharField(label="First Name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
     last_name=forms.CharField(label="Last Name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
@@ -48,6 +52,17 @@ class StudentEditForm(forms.Form):
     course=forms.ModelChoiceField(label="Course",queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
     # course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
     gender=forms.ChoiceField(label="Gender",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
-    session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
-    session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
+    
+    session_year_id=forms.ModelChoiceField(label="Session Year",queryset=SessionYear.objects.all(),empty_label="--- Select Session Year ---",widget=forms.Select(attrs={"class":"form-control"}))
+    # session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
+    # session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
+    
     profile_pic=forms.FileField(label="Profile Picture",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}),required=False)
+
+
+class SessionYearForm(forms.Form):
+    session_start = forms.DateField(label="Session Start", widget=DateInput(attrs={"class": "form-control"}))
+    session_end = forms.DateField(label="Session End", widget=DateInput(attrs={"class": "form-control"}))
+    # class Meta: # this is only when forms.ModelForm is used as form (forms.ModelForm) not (forms.Form)
+    #     model = SessionYear
+    #     fields = ['session_start_year', 'session_end_year']

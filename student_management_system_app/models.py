@@ -4,6 +4,17 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class SessionYear(models.Model):
+    # id = models.AutoField(primary_key=True)
+    session_start=models.DateField()
+    session_end=models.DateField()
+    objects=models.Manager()
+
+    def __str__(self):
+        return '{} TO {}'.format(self.session_start, self.session_end)
+        # return ("%s TO %s" % (self.session_start, self.session_end))
+
+
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"Staff"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
@@ -43,7 +54,7 @@ class Course(models.Model):
 
 class Subject(models.Model):
     # id=models.AutoField(primary_key=True)
-    subject_name=models.CharField(max_length=255,)
+    subject_name=models.CharField(max_length=255)
     course_id=models.ForeignKey(Course,on_delete=models.CASCADE,default=1)
     staff_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -58,8 +69,7 @@ class Student(models.Model):
     profile_pic=models.FileField() # models.ImageField(upload_to = "images/", blank=False)  or FileField(upload_to='images/')
     address=models.TextField()
     course_id=models.ForeignKey(Course,on_delete=models.DO_NOTHING)
-    session_start_year=models.DateField()
-    session_end_year=models.DateField()
+    session_year_id = models.ForeignKey(SessionYear, on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -68,8 +78,10 @@ class Student(models.Model):
 class Attendance(models.Model):    
     # id=models.AutoField(primary_key=True)
     subject_id=models.ForeignKey(Subject, on_delete=models.DO_NOTHING)
+    session_year_id = models.ForeignKey(SessionYear, on_delete=models.CASCADE)
     attendance_date=models.DateTimeField(auto_now_add=True)
-    created_at=models.DateTimeField(auto_now_add=True)
+    
+    created_at=models.DateTimeField(auto_now_add=True)    
     updated_at=models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
@@ -151,7 +163,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 2:
             Staff.objects.create(admin=instance,address='')
         if instance.user_type == 3:
-            Student.objects.create(admin=instance,course_id=Course.objects.get(id=1),session_start_year='2020-01-01',session_end_year='2021-01-01',address='',profile_pic='',gender='')
+            Student.objects.create(admin=instance,course_id=Course.objects.first(),session_year_id=SessionYear.objects.first(),address='',profile_pic='',gender='')
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):

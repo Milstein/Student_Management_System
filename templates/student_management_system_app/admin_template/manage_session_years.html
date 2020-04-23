@@ -1,9 +1,9 @@
 {% extends 'student_management_system_app/admin_template/base_template.html' %}
 
-{% block title %}Manage Student{% endblock title %}
+{% block title %}Manage Session Year{% endblock title %}
 
 {% block page_title %}
-Manage Student
+Manage Session Year
 {% endblock page_title %}
 
 {% block main_content %}
@@ -15,7 +15,8 @@ Manage Student
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Student Details</h3>
+            <h3 class="card-title">Session Year Details</h3>
+
             <div class="card-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
                 <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -32,47 +33,33 @@ Manage Student
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>User Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Gender</th>
-                  <th>Profile Pic</th>
-                  <th>Session Year</th>
-                  <th>Course</th>
-                  <th>Last Login</th>
-                  <th>Date Joined</th>
+                  <th>Session Start</th>
+                  <th>Session End</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {% if students %}
-                  {% for student in students %}
-                    <tr>
-                      <td>{{ student.admin.id }}</td>
-                      <td>{{ student.admin.first_name }}</td>
-                      <td>{{ student.admin.last_name }}</td>
-                      <td>{{ student.admin.username }}</td>
-                      <td>{{ student.admin.email }}</td>
-                      <td>{{ student.address }}</td>
-                      <td>{{ student.gender }}</td>
-                      <td><img src="{{student.profile_pic.url}}" style="width:100px" /></td>
-                      <td>{{ student.session_year_id.session_start }} TO {{ student.session_year_id.session_end }}</td>
-                      <td>{{ student.course_id.course_name }}</td>
-                      <td>{{ student.admin.last_login }}</td>
-                      <td>{{ student.admin.date_joined }}</td>
-                      <td><a href="{% url 'student_management_system_app:edit_student' student.admin.id %}"
-                          class="btn btn-success">Edit</a></td>
-                    </tr>
+                {% if session_years %}
+                  {% for session_year in session_years %}
+                  <tr>
+                    <td>{{ session_year.id }}</td>
+                    <td>{{ session_year.session_start }}</td>
+                    <td>{{ session_year.session_end }}</td>
+                    <td>
+                        <a href="{% url 'student_management_system_app:edit_session_year' session_year.id %}"
+                          class="btn btn-success">Edit</a>
+                        <a href="{% url 'student_management_system_app:delete_session_year' session_year.id %}"
+                          class="btn btn-danger">Delete</a>
+                    </td>
+                  </tr>
                   {% endfor %}
                 {% else %}
                   <tr>
-                      <td colspan="14">
+                      <td colspan="3">
                         <div class="alert alert-warning alert-dismissible">
                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                           <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
-                          You have not saved any students yet!
+                          You have not saved any session years yet!
                         </div>
                       </td>
                   </tr>

@@ -47,28 +47,28 @@
                     </a>
                 </li>
 
-                <li class="nav-header">STUDENTS</li>
+                <li class="nav-header">SESSION YEARS</li>
                 <li class="nav-item">
-                    {% url 'student_management_system_app:add_student' as add_student %}
-                    <a href="{{ add_student }}"
-                        class="nav-link {% if request.path == add_student %}active{% endif %}">
+                    {% url 'student_management_system_app:add_session_year' as add_session_year %}
+                    <a href="{{ add_session_year }}"
+                        class="nav-link {% if request.path == add_session_year %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Add Student
+                            Add Session Year
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'student_management_system_app:manage_students' as manage_students %}
-                    {% url 'student_management_system_app:edit_student' student_id=id as edit_student %}
-                    <a href="{{ manage_students }}"
-                        class="nav-link {% if request.path == manage_students %}active{% endif %} {% if request.path == edit_student %}active{% endif %}">
+                    {% url 'student_management_system_app:manage_session_years' as manage_session_years %}
+                    {% url 'student_management_system_app:edit_session_year' session_year_id=id as edit_session_year %}
+                    <a href="{{ manage_session_years }}"
+                        class="nav-link {% if request.path == manage_session_years %}active{% endif %} {% if request.path == edit_session_year %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Manage Students
+                            Manage Session Years
                         </p>
                     </a>
-                </li>
+                </li>                
 
                 <li class="nav-header">COURSES</li>
                 <li class="nav-item">
@@ -116,18 +116,53 @@
                     </a>
                 </li>
 
-                {% comment %} <li class="nav-header">ATTENDANCE REPORTS</li>
+                <li class="nav-header">STUDENTS</li>
                 <li class="nav-item">
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
+                    {% url 'student_management_system_app:add_student' as add_student %}
+                    <a href="{{ add_student }}"
+                        class="nav-link {% if request.path == add_student %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            View Attendance
-                            <span class="right badge badge-danger">New</span>
+                            Add Student
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:manage_students' as manage_students %}
+                    {% url 'student_management_system_app:edit_student' student_id=id as edit_student %}
+                    <a href="{{ manage_students }}"
+                        class="nav-link {% if request.path == manage_students %}active{% endif %} {% if request.path == edit_student %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Manage Students
                         </p>
                     </a>
                 </li>
 
-                <li class="nav-header">FEEDBACKS</li>
+                {% comment %} <li class="nav-header">ATTENDANCE REPORTS</li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:take_attendance' as take_attendance %}
+                    <a href="{{ take_attendance }}"
+                        class="nav-link {% if request.path == take_attendance %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Take Attendance
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:manage_attendances' as manage_attendances %}
+                    {% url 'student_management_system_app:edit_attendance' attendance_id=id as edit_attendance %}
+                    <a href="{{ manage_students }}"
+                        class="nav-link {% if request.path == manage_attendances %}active{% endif %} {% if request.path == edit_attendance %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Manage Attendances
+                        </p>
+                    </a>
+                </li> {% endcomment %}
+
+                {% comment %} <li class="nav-header">FEEDBACKS</li>
                 <li class="nav-item">
                     <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
