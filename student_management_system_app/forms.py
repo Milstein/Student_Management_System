@@ -44,10 +44,10 @@ class StudentEditForm(forms.Form):
     #     small_course=(course.id, course.course_name)
     #     course_list.append(small_course)
 
-    gender_choice=(
+    gender_choice=[
         ("Male","Male"),
         ("Female","Female")
-    )
+    ]
     
     course=forms.ModelChoiceField(label="Course",queryset=Course.objects.all(),empty_label="--- Select Course ---",widget=forms.Select(attrs={"class":"form-control"}))
     # course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
