@@ -61,6 +61,9 @@ class Subject(models.Model):
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
 
+    def __str__(self):
+        return self.subject_name
+
 
 class Student(models.Model):    
     # id=models.AutoField(primary_key=True)
@@ -79,7 +82,7 @@ class Attendance(models.Model):
     # id=models.AutoField(primary_key=True)
     subject_id=models.ForeignKey(Subject, on_delete=models.DO_NOTHING)
     session_year_id = models.ForeignKey(SessionYear, on_delete=models.CASCADE)
-    attendance_date=models.DateTimeField(auto_now_add=True)
+    attendance_date=models.DateField(auto_now_add=True)
     
     created_at=models.DateTimeField(auto_now_add=True)    
     updated_at=models.DateTimeField(auto_now_add=True)
@@ -100,8 +103,8 @@ class LeaveReportStudent(models.Model):
     # id=models.AutoField(primary_key=True)
     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
     leave_date=models.CharField(max_length=255)
-    leave_message=models.TextField()
-    leave_status=models.BooleanField(default=False)
+    leave_reason=models.TextField()
+    leave_status=models.IntegerField(default=0)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
@@ -111,8 +114,8 @@ class LeaveReportStaff(models.Model):
     # id=models.AutoField(primary_key=True)
     staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE)
     leave_date = models.CharField(max_length=255)
-    leave_message = models.TextField()
-    leave_status = models.BooleanField(default=False)
+    leave_reason = models.TextField()
+    leave_status = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -121,7 +124,7 @@ class LeaveReportStaff(models.Model):
 class FeedBackStudent(models.Model):    
     # id=models.AutoField(primary_key=True)
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    feedback = models.TextField()
+    feedback_message = models.TextField()
     feedback_reply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -131,7 +134,7 @@ class FeedBackStudent(models.Model):
 class FeedBackStaff(models.Model):    
     # id=models.AutoField(primary_key=True)
     staff_id = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    feedback = models.TextField()
+    feedback_message = models.TextField()
     feedback_reply=models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

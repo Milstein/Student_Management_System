@@ -45,11 +45,19 @@ Take Attendance
           <!-- /.card-body -->
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary btn-block" id="fetch_students">Fetch Students</button>
+            <button type="button" class="btn btn-primary btn-block" id="fetch_students">Fetch Students</button>
           </div>
 
-          <div id="student_data" class="card-footer">
+          <div id="student_data" class="card-footer" style="display:none;">
 
+          </div>
+
+          <div class="form-group">
+            <div id="empty_student" class="alert alert-warning alert-dismissible" style="display:none;">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+              No Student Data Found!
+            </div>
           </div>
 
         </div>
@@ -79,26 +87,35 @@ Take Attendance
         })
         .done(function (response) {
           var json_data = JSON.parse(response);
-          console.log(json_data);
-
-          var div_data =
-            '<div class="form-group"> <label>Attendance Date </label> <input type="date" class="form-control" name="attendance_date" id="attendance_date" placeholder="Enter Attendance Date" required> </div><div class="form-group"><div class="row">';
-          for (key in json_data) {
+          // console.log(json_data);
+          if (json_data.length > 0) {
+            var div_data =
+              '<div class="form-group"> <label>Attendance Date </label> <input type="date" class="form-control" name="attendance_date" id="attendance_date" placeholder="Enter Attendance Date" required> </div><div class="form-group"><div class="row">';
+            for (key in json_data) {
+              div_data +=
+                "<div class='col-lg-4'><div class='custom-control custom-checkbox'><input class='custom-control-input' type='checkbox' checked='checked' id='student_" +
+                json_data[key].id + "' name='student_data[]' value=" + json_data[key].id +
+                "><label for='student_" + json_data[key].id + "' class='custom-control-label'>" + json_data[
+                  key]
+                .name + "</label></div></div>";
+            }
+            div_data += '</div></div>';
+            div_data += '<div class="form-group">';
             div_data +=
-              "<div class='col-lg-4'><div class='custom-control custom-checkbox'><input class='custom-control-input' type='checkbox' checked='checked' id='student_" +
-              json_data[key].id + "' name='student_data[]' value=" + json_data[key].id +
-              "><label for='student_" + json_data[key].id + "' class='custom-control-label'>" + json_data[key]
-              .name + "</label></div></div>";
+              '<button id="save_attendance" type="button" class="btn btn-success btn-block">Save Attendance Data</button>';
+            div_data += '</div>';
+            $("#student_data").html(div_data);
+            $("#student_data").show();
+            $("#empty_student").hide();
+          } else {
+            $("#student_data").hide();
+            $("#empty_student").show();
           }
-          div_data += '</div></div>';
-          div_data += '<div class="form-group">';
-          div_data +=
-            '<button id="save_attendance" type="button" class="btn btn-success btn-block">Save Attendance Data</button>';
-          div_data += '</div>';
-          $("#student_data").html(div_data);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert('Error in Fetching Students!');
+          $("#student_data").hide();
+          $("#empty_student").hide();
         })
     });
 
@@ -125,7 +142,7 @@ Take Attendance
       var session_year_id = $("#session_year").val();
 
       student_data = JSON.stringify(student_data)
-      console.log(student_data);
+      //console.log(student_data);
 
       $.ajax({
           url: "{% url 'student_management_system_app:save_attendance_data'%}",
@@ -151,7 +168,7 @@ Take Attendance
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert('Error in Saving Attendance Record!');
         })
-    })
+    });
   })
 </script>
 {% endblock custom_js %}

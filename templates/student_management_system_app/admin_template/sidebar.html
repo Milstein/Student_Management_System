@@ -151,13 +151,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    {% url 'student_management_system_app:manage_attendances' as manage_attendances %}
+                    {% url 'student_management_system_app:view_attendance_reports' as view_attendance_reports %}
                     {% url 'student_management_system_app:edit_attendance' attendance_id=id as edit_attendance %}
                     <a href="{{ manage_students }}"
-                        class="nav-link {% if request.path == manage_attendances %}active{% endif %} {% if request.path == edit_attendance %}active{% endif %}">
+                        class="nav-link {% if request.path == view_attendance_reports %}active{% endif %} {% if request.path == edit_attendance %}active{% endif %}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Manage Attendances
+                            View Attendance Reports
                         </p>
                     </a>
                 </li> {% endcomment %}

@@ -1,0 +1,240 @@
+{% extends 'student_management_system_app/staff_template/base_template.html' %}
+
+{% block title %}Edit Attendance{% endblock title %}
+
+{% block page_title %}
+Edit Attendance
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">View Update Attendance Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+
+                    <!-- form start -->
+                    <input type="hidden" name="course_id" value="{{ course.id }}">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select class="form-control" name="subject" id="subject">
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Session Year</label>
+                            <select class="form-control" name="session_year" id="session_year">
+                                {% for session_year in session_years %}
+                                    <option value="{{ session_year.id }}">{{ session_year.session_start }} TO {{ session_year.session_end }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Fetching Attendance Date -->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-block" id="fetch_attendances">Fetch
+                                Attendances</button>
+                        </div>
+
+                        <div class="form-group" id="attendance_date_block" style="display:none;">
+                            <label>Attendance Date</label>
+                            <select class="form-control" name="attendance_date" id="attendance_date">
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="empty_attendance" class="alert alert-warning alert-dismissible"
+                                style="display:none;">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                                No Attendance Data Found!
+                            </div>
+                        </div>
+
+                        <!-- Fetching Student -->
+                        <div class="form-group" id="student_block" style="display:none;">
+                            <button type="button" class="btn btn-primary btn-block" id="fetch_students">Fetch Students
+                                Data</button>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div id="student_data" class="card-footer" style="display:none;">
+
+                    </div>
+
+                    <div class="form-group">
+                        <div id="empty_student" class="alert alert-warning alert-dismissible" style="display:none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                        No Student Data Found!
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+    $(document).ready(function () {
+        $('#fetch_attendances').click(function () {
+            var subject = $("#subject").val();
+            var session_year = $("#session_year").val();
+
+            $.ajax({
+                    url: "{% url 'student_management_system_app:get_attendance_dates'%}",
+                    type: 'POST',
+                    data: {
+                        subject: subject,
+                        session_year: session_year
+                    },
+                    datatype: 'json'
+                })
+                .done(function (response) {
+                    var json_data = JSON.parse(response);
+                    if (json_data.length > 0) {                        
+                        var html_data = '';
+                        for (key in json_data) {
+                            html_data += "<option value=" + json_data[key].id + ">" + json_data[key]
+                                .attendance_date + "</option>";
+                        }
+                        $("#attendance_date").html(html_data);
+                        $("#empty_attendance").hide();
+                        $("#attendance_date_block").show();
+                        $("#student_block").show();                        
+                    } else {
+                        $('#attendance_date option').remove();
+                        $("#attendance_date_block").hide();
+                        $("#empty_attendance").show();
+                        $("#student_block").hide();
+                    }
+
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('Error in Fetching Attendance!');
+                    $('#attendance_date option').remove();
+                    $("#attendance_date_block").hide();
+                    $("#empty_attendance").hide();
+                    $("#student_block").hide();
+                })
+        });
+
+        $('#fetch_students').click(function () {
+            var attendance_date = $("#attendance_date").val();
+
+            $.ajax({
+                    url: "{% url 'student_management_system_app:get_attendance_students'%}",
+                    type: 'POST',
+                    data: {
+                        attendance_date: attendance_date
+                    },
+                    datatype: 'json'
+                })
+                .done(function (response) {
+                    var json_data = JSON.parse(response);
+                    // console.log(json_data);
+                    if (json_data.length > 0) { 
+                        var div_data =
+                            "<div class='form-group'><label>Student Attendance: </label></div><div class='form-group'><div class='row'>";
+
+                        for (key in json_data) {
+                            div_data +=
+                                "<div class='col-lg-4'><div class='custom-control custom-checkbox'><input class='custom-control-input' type='checkbox' ";
+                            if (json_data[key].status) {
+                                div_data += "checked='checked' ";
+                            }
+                            div_data += " id='student_" + json_data[key].id +
+                                "' name='student_data[]' value=" + json_data[key].id +
+                                "><label for='student_" + json_data[key].id +
+                                "' class='custom-control-label'>";
+                            if (json_data[key].status) {
+                                div_data += json_data[key].name + " [Present]";
+                            } else {
+                                div_data += json_data[key].name + " [Absent]";
+                            }
+                            div_data += "</label></div></div>";
+                        }
+                        div_data += '</div></div>';
+                        div_data += '<div class="form-group"><div class="row">';
+                        div_data +=
+                            '<button id="update_attendance" type="button" class="btn btn-success btn-block">Save Attendance Data</button>';
+                        div_data += '</div></div>';
+                        $("#student_data").html(div_data);
+                        $("#student_data").show();
+                        $("#empty_student").hide();
+                    } else {
+                        $("#student_data").hide();
+                        $("#empty_student").show();
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('Error in Fetching Students!');
+                    $("#student_data").hide();
+                    $("#empty_student").hide();
+                })
+        });
+
+        $(document).on("click", "#update_attendance", function () {
+
+            $(this).attr("disabled", "disabled");
+            $(this).text("Updating Attendance Record...")
+            var student_data = $("input[name='student_data[]']").map(function () {
+                if ($(this).is(":checked")) {
+                    return {
+                        "id": $(this).val(),
+                        "status": 1
+                    };
+                } else {
+                    return {
+                        "id": $(this).val(),
+                        "status": 0
+                    };
+                }
+            }).get();
+            var attendance_date = $("#attendance_date").val();
+
+            student_data = JSON.stringify(student_data)
+
+            $.ajax({
+                    url: "{% url 'student_management_system_app:update_attendance_data'%}",
+                    type: 'POST',
+                    data: {
+                        student_ids: student_data,
+                        attendance_date: attendance_date
+                    },
+                    datatype: 'json'
+                })
+                .done(function (response) {
+                    if (response == "OK") {
+                        alert("Attendance Record is updated Successfully.")
+                    } else {
+                        alert("Error in Updating Attendance Record!")
+                    }
+                    location.reload();
+                    // var json_data = JSON.parse(response);
+                    // console.log(response);
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('Error in Updating Attendance Record!');
+                })
+        });
+
+    })
+</script>
+{% endblock custom_js %}

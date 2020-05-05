@@ -60,7 +60,18 @@ urlpatterns = [
     path('take_attendance', StaffViews.take_attendance, name='take_attendance'),
     path('get_students', StaffViews.get_students, name='get_students'),
     path('save_attendance_data', StaffViews.save_attendance_data, name='save_attendance_data'),
-    path('manage_attendances', StaffViews.manage_attendances, name='manage_attendances'),
-	
+    
+    path('view_attendance_reports', StaffViews.view_attendance_reports, name='view_attendance_reports'),
+	path('edit_attendance', StaffViews.edit_attendance, name='edit_attendance'),
+    path('get_attendance_dates', StaffViews.get_attendance_dates, name='get_attendance_dates'),
+    path('get_attendance_students', StaffViews.get_attendance_students, name='get_attendance_students'),
+    path('update_attendance_data', StaffViews.update_attendance_data, name='update_attendance_data'),
+    
+    path('staff_apply_leave', StaffViews.staff_apply_leave, name='staff_apply_leave'),
+    path('staff_leave_save', StaffViews.staff_leave_save, name='staff_leave_save'),   
+
+    path('staff_feedback', StaffViews.staff_feedback, name='staff_feedback'),
+    path('staff_feedback_save', StaffViews.staff_feedback_save, name='staff_feedback_save'),
+
     path('student_home', StudentViews.student_home, name='student_home'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
