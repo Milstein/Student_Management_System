@@ -5,7 +5,7 @@ Student_Management_System in Django app
 
 `cd Student_Management_System`.
 
-Create a virtual environment by running `virtualenv venv`.
+Create a virtual environment by running `py -3 -m venv venv`.
 
 ### Activate the virtual environment by running:
 
