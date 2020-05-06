@@ -3,7 +3,7 @@ Student_Management_System in Django app
 
 `git clone` this repository.
 
-`cd rcc_django_cookiecutter`.
+`cd Student_Management_System`.
 
 Create a virtual environment by running `virtualenv venv`.
 
@@ -27,7 +27,7 @@ To see the website, go to `http://localhost:8000`.
 
 ## To change the Layout and Theme:
 
-* `templates\rcc_django_cookiecutter_app`    
+* `templates\student_management_system_app`    
     * `index.html` is used as the home page inheriting the `base.html`.
     
  - Change the Template pages as required to customize.
