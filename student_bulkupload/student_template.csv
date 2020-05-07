@@ -1,0 +1,5 @@
+email,password,first_name,last_name,username,address,course_name,gender,session_start,session_end,profile_pic
+test1@test.com,test,Test First1,Test Last,test_user1,Cloud,Cloud Computing,Male,1/1/2019,4/1/2020,test1.png
+test2@test.com,test,Test First2,Test Last,test_user2,Cloud,Cloud Computing,Female,2/1/2019,4/1/2020,test2.png
+test3@test.com,test,Test First3,Test Last,test_user3,Cloud,Cloud Computing,Male,3/1/2019,4/1/2020,test3.png
+test4@test.com,test,Test First4,Test Last,test_user4,Cloud,Cloud Computing,Female,4/1/2019,4/1/2020,test4.png

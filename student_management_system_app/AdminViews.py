@@ -318,7 +318,7 @@ def add_student_save(request):
     if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        form = StudentCreationForm(request.POST, request.FILES)
+        form = StudentCreationForm(request.POST, request.FILES)        
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
@@ -485,9 +485,9 @@ def add_students_bulk(request):
                     return redirect(reverse('student_management_system_app:add_students_bulk'))
 
                 # Upload the file
-                fs = FileSystemStorage()
+                fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'bulk_uploads'))
                 filename = fs.save(csv_file.name, csv_file)
-                uploaded_file_url = fs.url(filename)
+                # uploaded_file_url = fs.url(filename)
 
                 DATETIME_INPUT_FORMATS = [
                     '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
@@ -508,7 +508,7 @@ def add_students_bulk(request):
 
                 expected_headers = ['email', 'password', 'first_name', 'last_name', 'username', 'address', 'course_name', 'gender', 'session_start', 'session_end', 'profile_pic']
               
-                with open(os.path.join(settings.MEDIA_ROOT, filename)) as csvfile:
+                with open(os.path.join(settings.MEDIA_ROOT, 'bulk_uploads', filename)) as csvfile:
                     reader = csv.reader(csvfile)
 
                     headers = next(reader, None) # Reading Header Row
@@ -529,25 +529,35 @@ def add_students_bulk(request):
                             blanked_line = list(map(lambda x: x or None, line)) #Turns '' into None
 
                             # Saving Course
-                            course = Course.objects.create(course_name=blanked_line[header_map['course_name']])
+                            course_name=blanked_line[header_map['course_name']]
+                            if Course.objects.filter(course_name=course_name).count():
+                                # Course already exists - updating it
+                                course = Course.objects.get(course_name=course_name)
+                            else:
+                                course = Course(course_name=course_name)
+                            course.save()
                             
                             # Saving Session Year
-                            session_year = SessionYear()
                             if blanked_line[header_map['session_start']]:#is not None
                                 #Note this is technically not necessary, because date is a required (not null) field
                                 #However, should this change in the future, we don't want to cause a hard to find bug
-                                session_year.session_start = datetime.strptime(blanked_line[header_map['session_start']], DATETIME_INPUT_FORMAT)
+                                session_start = datetime.strptime(blanked_line[header_map['session_start']], DATETIME_INPUT_FORMAT)
                             else:
-                                session_year.session_start = None
+                                session_start = None
                             if blanked_line[header_map['session_end']]:#is not None
                                 #Note this is technically not necessary, because date is a required (not null) field
                                 #However, should this change in the future, we don't want to cause a hard to find bug
-                                session_year.session_end = datetime.strptime(blanked_line[header_map['session_end']], DATETIME_INPUT_FORMAT)
+                                session_end = datetime.strptime(blanked_line[header_map['session_end']], DATETIME_INPUT_FORMAT)
                             else:
-                                session_year.session_end = None
-
+                                session_end = None
+                            
+                            if SessionYear.objects.filter(session_start=session_start, session_end=session_end).count():
+                                # Session Year already exists - updating it
+                                session_year = SessionYear.objects.get(session_start=session_start, session_end=session_end)
+                            else:
+                                session_year = SessionYear(session_start=session_start, session_end=session_end)
                             session_year.save()
-
+                            
                             email = blanked_line[header_map['email']]
                             password = blanked_line[header_map['password']]
                             first_name = blanked_line[header_map['first_name']]
@@ -599,7 +609,7 @@ def add_students_bulk(request):
                                 user.student.course_id = course
                                 user.student.gender = gender
                                 user.student.profile_pic = profile_pic
-                                user.save()
+                                user.student.save()
                                 
                             else:
                                 messages.error(request, form_student.errors.as_json())
