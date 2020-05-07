@@ -55,6 +55,10 @@ urlpatterns = [
 	path('edit_student/<int:student_id>', AdminViews.edit_student, name='edit_student'),
     path('edit_student_save', AdminViews.edit_student_save, name='edit_student_save'),
 
+    # path('add_students_bulk', AdminViews.StudentBulkUploadView.as_view(), name='add_students_bulk'),
+    path('add_students_bulk', AdminViews.add_students_bulk, name='add_students_bulk'),
+    path('download_student_csv_template', AdminViews.download_student_csv_template, name='download_student_csv_template'),
+
     path('staff_home', StaffViews.staff_home, name='staff_home'),
 
     path('take_attendance', StaffViews.take_attendance, name='take_attendance'),

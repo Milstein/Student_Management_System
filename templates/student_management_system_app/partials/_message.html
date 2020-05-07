@@ -1,13 +1,9 @@
 {% if messages %}
 {% for message in messages %}
 
-<div class="container">
-    {% if message.tags == 'error' %}
-        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
-    {% endif %}
-    {% if message.tags == 'success' %}
-        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
-    {% endif %}
-</div>
+<script type="text/javascript">
+    toastr.options.progressBar = true;
+    toastr.{{ message.tags }}('{{ message }}')
+</script>
 {% endfor %}
 {% endif %}

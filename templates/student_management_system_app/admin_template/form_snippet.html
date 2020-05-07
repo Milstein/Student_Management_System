@@ -1,0 +1,21 @@
+{% load widget_tweaks %}
+
+{% for field in form %}
+<div class="form-group">
+  <label class="col-form-label" for="{{ field.auto_id }}">
+    {{ field.label }}
+    {% for error in field.errors %}
+    <small id="{{ field.auto_id }}" class="text-danger">{{ error }}</small>
+    {% endfor %}
+  </label>
+
+  {% if field.field.widget.input_type  == 'file' %}
+  {{ field | add_class:"form-control pt-3 pb-5" }}
+  {% else %}
+  {{ field | add_class:"form-control" }}
+  {% endif %}
+  {% if field.help_text %}
+  <small>{{ field.help_text|safe }}</small>
+  {% endif %}
+</div>
+{% endfor %}

@@ -78,6 +78,11 @@ class Student(models.Model):
     objects = models.Manager()
 
 
+class StudentBulkUpload(models.Model):
+  date_uploaded = models.DateTimeField(auto_now=True)
+  csv_file = models.FileField(upload_to='students/bulkupload/', help_text="Please upload your data after checking for proper formatting")
+
+
 class Attendance(models.Model):    
     # id=models.AutoField(primary_key=True)
     subject_id=models.ForeignKey(Subject, on_delete=models.DO_NOTHING)

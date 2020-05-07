@@ -17,9 +17,14 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" />
   <link rel="title icon" href="{% static 'app/images/contact-icon.png' %}">
   <title>
-    {% block title %}
-    {% endblock title%}
+    Student Management System | {% block title %}{% endblock title %}
   </title>
+
+
+
+  <!-- Toastr Alert Message -->
+  <link rel="stylesheet" href="{% static 'toastr/toastr.css' %}">
+  
 </head>
 
 <body>
@@ -56,7 +61,6 @@
   <!-- Navbar ends -->
   <br />
 
-  {% include 'app/partials/_message.html' %}
   <!-- Main Section -->
   {% block  content %}
   {% endblock content %}
@@ -77,6 +81,13 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
+
+  <!-- Toastr Alert Message -->
+  <script src="{% static 'toastr/toastr.min.js' %}"></script>
+  {% include 'app/partials/_message.html' %}
+  
+  {% block custom_js %}
+  {% endblock custom_js %}
 </body>
 
 </html>

@@ -1,0 +1,48 @@
+{% extends 'student_management_system_app/admin_template/base_template.html' %}
+
+{% block title %}Upload Bulk Students from file{% endblock title %}
+
+{% block page_title %}
+Upload Bulk Students from file
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="alert alert-info alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-warning"></i> Instruction!</h4>
+            Please <a href="{% url 'student_management_system_app:download_student_csv_template' %}">download the CSV file attached here</a>.
+            Fill in the sheet and upload the same file back to this page. DO NOT EDIT THE FIRST ROW
+        </div>
+
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          {% url 'student_management_system_app:add_students_bulk' as action_path %}
+          {% include 'student_management_system_app/admin_template/form_template.html' with messages=messages form=form action_path=action_path button_text="Bulk Upload" %}
+        
+          <!-- form start -->
+          <!--<form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-body">
+              {% include 'student_management_system_app/admin_template/form_snippet.html' %}
+            </div>
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </div>
+          </form>-->
+
+        </div> 
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
