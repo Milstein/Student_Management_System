@@ -1,5 +1,4 @@
-# Student_Management_System
-Student_Management_System in Django app
+# Student Management System
 
 `git clone` this repository.
 
@@ -32,3 +31,7 @@ To see the website, go to `http://localhost:8000`.
     
  - Change the Template pages as required to customize.
 
+## Feedback
+Any suggestion and feedback is welcome. You can message me on facebook or my personal website
+- [Milstein on Facebook](https://fb.com/milsonmun)
+- [Milstein's Personal Site](https://milstein.me)
