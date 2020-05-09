@@ -45,7 +45,7 @@ To see the website, go to `http://localhost:8000`.
 
 If you'd like to contribute, simply fork [`the repository`](https://github.com/Milstein/Student_Management_System), commit your
 changes to the **develop** branch (or branch off of it), and send a pull
-request. Make sure you add yourself to [AUTHORS](https://github.com/Milstein/Student_Management_Systemblob/master/AUTHORS).
+request. Make sure you add yourself to [AUTHORS](https://github.com/Milstein/Student_Management_System/blob/master/AUTHORS).
 
 As most projects, we try to follow [PEP8](https://www.python.org/dev/peps/pep-0008/) as closely as possible. Please bear
 in mind that most pull requests will be rejected without proper unit testing.
