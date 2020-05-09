@@ -77,29 +77,29 @@ WSGI_APPLICATION = 'student_management_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE':   "django.db.backends.mysql",
-        'NAME':     "db_student_mgmt_system",
-        'USER':     "root",
-        'PASSWORD': "",
-        'HOST':     "localhost",
-        'PORT':     "3306",
-        'STORAGE_ENGINE':   "InnoDB",
-        'OPTIONS': {
-            'init_command': 'SET default_storage_engine=InnoDB',
-            'charset':      'utf8',
-            'use_unicode':  True,
-        },
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE':   "django.db.backends.mysql",
+#         'NAME':     "db_student_mgmt_system",
+#         'USER':     "root",
+#         'PASSWORD': "",
+#         'HOST':     "localhost",
+#         'PORT':     "3306",
+#         'STORAGE_ENGINE':   "InnoDB",
+#         'OPTIONS': {
+#             'init_command': 'SET default_storage_engine=InnoDB',
+#             'charset':      'utf8',
+#             'use_unicode':  True,
+#         },
+#     },
+# }
 
 
 # Password validation
