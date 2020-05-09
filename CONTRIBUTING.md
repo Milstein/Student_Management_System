@@ -32,7 +32,7 @@ should take to help get it added/fixed in Student Management System:
     * If relevant, including the versions of your:
         * Python interpreter
         * Django version
-        * Student_Management_System
+        * Student_Management_System version
         * Optionally of the other dependencies involved
     * Ideally, creating a pull request with a (failing) test case demonstrating
       what's wrong. This makes it easy for us to reproduce & fix the problem.
