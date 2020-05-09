@@ -6,7 +6,7 @@
 
 Create a virtual environment by running `py -3 -m venv venv`.
 
-### Activate the virtual environment by running:
+## Activate the virtual environment by running:
 
   * on Linux/Mac: `source venv/bin/activate`
 
