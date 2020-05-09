@@ -1,4 +1,6 @@
+===========================
 # Student Management System
+===========================
 
 `git clone` this repository.
 
@@ -30,6 +32,28 @@ To see the website, go to `http://localhost:8000`.
     * `index.html` is used as the home page inheriting the `base.html`.
     
  - Change the Template pages as required to customize.
+ 
+## Features
+
+* Bulk Upload
+* Toast Messaging
+* 3 different user types - HOD(admin), Staff and Student
+* AJAX enabled functions
+* Customized Template
+
+## Contribute
+
+If you'd like to contribute, simply fork `the repository`_, commit your
+changes to the **develop** branch (or branch off of it), and send a pull
+request. Make sure you add yourself to AUTHORS_.
+
+As most projects, we try to follow PEP8_ as closely as possible. Please bear
+in mind that most pull requests will be rejected without proper unit testing.
+
+.. _`PEP8`: https://www.python.org/dev/peps/pep-0008/
+.. _`the repository`: https://github.com/Milstein/Student_Management_System
+.. _AUTHORS: https://github.com/Milstein/Student_Management_Systemblob/master/AUTHORS
+
 
 ## Feedback
 Any suggestion and feedback is welcome. You can message me on facebook or my personal website
