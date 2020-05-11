@@ -34,8 +34,6 @@ def view_student_attendance_data(request):
     attendance = Attendance.objects.filter(attendance_date__range=(start_date_parse, end_date_parse), subject_id=subject)
     attendace_reports = AttendanceReport.objects.filter(student_id=student.id, attendance_id__in=attendance)
 
-    # for attendace_report in attendace_reports:
-    #     print('Date : ' + str(attendace_report.attendance_id.attendance_date) + ' Status: ' + str(attendace_report.status))
     context = {
         'attendace_reports': attendace_reports
     }
