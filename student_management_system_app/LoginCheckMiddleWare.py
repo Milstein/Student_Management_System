@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
+from django.urls import reverse
 
 
 class LoginCheckMiddleWare(MiddlewareMixin):
@@ -31,8 +32,8 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                     return redirect('student_management_system_app:student_home')
             else:
                 return redirect('student_management_system_app:login_user')
-        # else:
-        #     if request.path == reverse("student_management_system_app:home") or request.path == reverse("student_management_system_app:show_login") or request.path == reverse("student_management_system_app:login_user"):
-        #         pass
-        #     else:
-        #         return redirect('student_management_system_app:home')
+        else:
+            if request.path == reverse("student_management_system_app:home") or request.path == reverse("student_management_system_app:signup") or request.path == reverse("student_management_system_app:login_user") or modulename == "django.contrib.auth.views":
+                pass
+            else:
+                return redirect('student_management_system_app:home')

@@ -633,14 +633,15 @@ def add_students_bulk(request):
     return render(request, 'student_management_system_app/admin_template/add_students_bulk.html', context)
 
 
-class StudentBulkUploadView(SuccessMessageMixin, CreateView):
+class StudentBulkUploadView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = StudentBulkUpload
     template_name = 'student_management_system_app/admin_template/add_students_bulk.html'
     fields = ['csv_file']
     success_url = 'student_management_system_app:manage_students'
     success_message = 'Successfully uploaded students'
     
-    
+
+@login_required   
 def download_student_csv_template(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="student_template.csv"'

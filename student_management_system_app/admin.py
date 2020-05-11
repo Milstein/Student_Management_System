@@ -8,3 +8,8 @@ class UserModel(UserAdmin):
     pass
 
 admin.site.register(CustomUser,UserModel)
+
+# Customizing the admin texts
+admin.site.site_header = "Student Management System"
+admin.site.index_title = "Welcome to project"
+admin.site.site_title = "Control Panel"

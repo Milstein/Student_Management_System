@@ -1,0 +1,63 @@
+{% extends 'student_management_system_app/student_template/base_template.html' %}
+{% block page_title %}
+Attendance Data
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">View Attendance</h3>
+          </div>
+          <!-- /.card-header -->
+
+          <div class="card-body">
+            <div class="row">
+              {% if attendace_reports %}
+                {% for attendace_report in attendace_reports %}
+                  {% if attendace_report.status %}
+
+                  <div class="info-box m-3 bg-success">
+                    <div class="info-box-content">
+                      <span class="info-box-text"><b>Date : {{ attendace_report.attendance_id.attendance_date }}</b></span>
+                      <span class="info-box-text"><b>[Status: Present]</b></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  {% else %}
+                  <div class="info-box m-3 bg-danger">
+                    <div class="info-box-content">
+                      <span class="info-box-text"><b>Date : {{ attendace_report.attendance_id.attendance_date }}</b></span>
+                      <span class="info-box-text"><b>[Status: Present]</b></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <div class="form-group">
+                  <div id="empty_attendance" class="alert alert-warning alert-dismissible" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h5><i class="icon fas fa-exclamation-triangle"></i>Alert!</h5>
+                    No Attendance Data Found!
+                  </div>
+                </div>
+              {% endif %}
+
+            </div>
+          </div>
+
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}

@@ -13,7 +13,7 @@ app_name = 'student_management_system_app'
 urlpatterns = [
     # path('demo', views.showDemoPage),    
     path('', views.HomePageView.as_view(), name='home'),
-    path('show_login', views.show_login, name='show_login'),
+    # path('show_login', views.show_login, name='show_login'),
     path('login_user', views.login_user, name='login_user'),
     path('get_user_details', views.GetUserDetails, name='userdetails'),
 	path('logout_user', views.logout_user, name='logout_user'),
@@ -78,4 +78,7 @@ urlpatterns = [
     path('staff_feedback_save', StaffViews.staff_feedback_save, name='staff_feedback_save'),
 
     path('student_home', StudentViews.student_home, name='student_home'),
+    path('student_view_attendance', StudentViews.student_view_attendance, name='student_view_attendance'),
+    path('view_student_attendance_data', StudentViews.view_student_attendance_data, name='view_student_attendance_data'),
+
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

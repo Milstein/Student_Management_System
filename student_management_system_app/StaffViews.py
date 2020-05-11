@@ -75,6 +75,7 @@ def view_attendance_reports(request):
     return render(request, 'student_management_system_app/staff_template/view_attendance_reports.html', {"attendances":attendances})
 
 
+@login_required
 def edit_attendance(request):
     context = {
         'subjects' : Subject.objects.filter(staff_id=request.user),
@@ -106,8 +107,6 @@ def get_attendance_students(request):
     attendance = Attendance.objects.get(id=attendance_date)
 
     attendancereports = AttendanceReport.objects.filter(attendance_id=attendance)
-
-    print(attendancereports)
 
     list_data = []
     for attendancereport in attendancereports:
@@ -170,12 +169,14 @@ class AttendanceDeleteView(LoginRequiredMixin, DeleteView):
         return super().delete(self, request, *args, **kwargs)
 
 
+@login_required
 def staff_apply_leave(request):
     staff = Staff.objects.get(admin=request.user.id)
     leaves = LeaveReportStaff.objects.filter(staff_id=staff)
     return render(request, 'student_management_system_app/staff_template/staff_apply_leave.html', { 'leaves': leaves })
 
 
+@login_required
 def staff_leave_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
@@ -194,12 +195,14 @@ def staff_leave_save(request):
             return redirect("student_management_system_app:staff_apply_leave")
 
 
+@login_required
 def staff_feedback(request):
     staff = Staff.objects.get(admin=request.user.id)
     feedbacks = FeedBackStaff.objects.filter(staff_id=staff)
     return render(request, 'student_management_system_app/staff_template/staff_feedback.html', { 'feedbacks': feedbacks })
 
 
+@login_required
 def staff_feedback_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
