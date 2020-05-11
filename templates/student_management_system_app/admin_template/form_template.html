@@ -10,6 +10,7 @@
         {{ field.errors }}
         {{ field.label_tag }}
         {{ field }}
+        <span class="small">{{ field.help_text|safe}}</span>
       </div>
       {% endif %}
     {% endfor %}
