@@ -7,7 +7,7 @@ import io
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.storage import FileSystemStorage
@@ -15,6 +15,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from student_management_system_app.forms import StudentCreationForm, StudentEditForm, StudentBulkUploadForm, \
@@ -27,6 +28,28 @@ from student_management_system_app.models import CustomUser, Course, Subject, St
 def admin_home(request):
     return render(request, 'student_management_system_app/admin_template/admin_home.html')
 
+
+@csrf_exempt
+@user_passes_test(lambda u: u.is_superuser)
+def check_email_exist(request):
+    email = request.POST.get('email')
+    user = CustomUser.objects.filter(email=email).exists()
+    if user:
+        return HttpResponse(True)
+    else:
+        return HttpResponse(False)
+
+
+@csrf_exempt
+@user_passes_test(lambda u: u.is_superuser)
+def check_username_exist(request):
+    username = request.POST.get('username')
+    user = CustomUser.objects.filter(username=username).exists()
+    if user:
+        return HttpResponse(True)
+    else:
+        return HttpResponse(False)
+        
 
 @login_required
 def add_staff(request):

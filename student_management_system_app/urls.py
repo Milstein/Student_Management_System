@@ -50,6 +50,8 @@ urlpatterns = [
     path('edit_subject_save', AdminViews.edit_subject_save, name='edit_subject_save'),
 
     path('add_student', AdminViews.add_student, name='add_student'),
+    path('check_email_exist', AdminViews.check_email_exist, name='check_email_exist'),
+    path('check_username_exist', AdminViews.check_username_exist, name='check_username_exist'),
     path('add_student_save', AdminViews.add_student_save, name='add_student_save'),
     path('manage_students', AdminViews.manage_students, name='manage_students'),
 	path('edit_student/<int:student_id>', AdminViews.edit_student, name='edit_student'),
@@ -80,5 +82,12 @@ urlpatterns = [
     path('student_home', StudentViews.student_home, name='student_home'),
     path('student_view_attendance', StudentViews.student_view_attendance, name='student_view_attendance'),
     path('view_student_attendance_data', StudentViews.view_student_attendance_data, name='view_student_attendance_data'),
+
+    path('student_apply_leave', StudentViews.student_apply_leave, name='student_apply_leave'),
+    path('student_leave_save', StudentViews.student_leave_save, name='student_leave_save'),   
+
+    path('student_feedback', StudentViews.student_feedback, name='student_feedback'),
+    path('student_feedback_save', StudentViews.student_feedback_save, name='student_feedback_save'),
+
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

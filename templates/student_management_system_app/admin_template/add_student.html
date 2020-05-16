@@ -30,3 +30,69 @@ Add Student
 </section>
 <!-- /.content -->
 {% endblock main_content %}
+
+{% block custom_js %}
+<script>
+  $(document).ready(function () {
+    $('#id_email').on('keyup', function () {
+      var email = $(this).val();
+      if (email != "" & email.length >= 3) {
+        $.ajax({
+            url: "{% url 'student_management_system_app:check_email_exist'%}",
+            type: 'POST',
+            data: {
+              email: email
+            },
+            datatype: 'json'
+          })
+          .done(function (response) {
+            if (response == "True") {
+              $(".email_availability").remove();
+              $("<span class='email_availability' style='padding:5px;color:red;font-weight:bold;'>Email Not Available!</span>")
+                .insertAfter("#id_email");
+            } else {
+              $(".email_availability").remove();
+              $("<span class='email_availability' style='padding:5px;color:green;font-weight:bold;'>Email Available!</span>")
+                .insertAfter("#id_email");
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Error in Fetching Email!');
+          })
+      }else{
+        $(".email_availability").remove();
+      }
+    });
+
+    $('#id_username').on('keyup', function () {
+      var username = $(this).val();
+      if (username != "" & username.length >= 3) {
+        $.ajax({
+            url: "{% url 'student_management_system_app:check_username_exist'%}",
+            type: 'POST',
+            data: {
+              username: username
+            },
+            datatype: 'json'
+          })
+          .done(function (response) {
+            if (response == "True") {
+              $(".username_availability").remove();
+              $("<span class='username_availability' style='padding:5px;color:red;font-weight:bold;'>Username Not Available!</span>")
+                .insertAfter("#id_username");
+            } else {
+              $(".username_availability").remove();
+              $("<span class='username_availability' style='padding:5px;color:green;font-weight:bold;'>Username Available!</span>")
+                .insertAfter("#id_username");
+            }
+          })
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Error in Fetching Username!');
+          })
+      }else{
+        $(".username_availability").remove();
+      }
+    });
+  })
+</script>
+{% endblock custom_js %}
