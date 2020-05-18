@@ -61,6 +61,11 @@ urlpatterns = [
     path('add_students_bulk', AdminViews.add_students_bulk, name='add_students_bulk'),
     path('download_student_csv_template', AdminViews.download_student_csv_template, name='download_student_csv_template'),
 
+    path('staff_feedback_message', AdminViews.staff_feedback_message, name='staff_feedback_message'),
+    path('staff_feedback_message_replied', AdminViews.staff_feedback_message_replied, name='staff_feedback_message_replied'),
+    path('student_feedback_message', AdminViews.student_feedback_message, name='student_feedback_message'),
+    path('student_feedback_message_replied', AdminViews.student_feedback_message_replied, name='student_feedback_message_replied'),
+
     path('staff_home', StaffViews.staff_home, name='staff_home'),
 
     path('take_attendance', StaffViews.take_attendance, name='take_attendance'),

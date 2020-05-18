@@ -137,7 +137,49 @@
                             Manage Students
                         </p>
                     </a>
+                </li>                
+
+                <li class="nav-header">FEEDBACKS</li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:staff_feedback_message' as staff_feedback_message %}
+                    <a href="{{ staff_feedback_message }}" class="nav-link {% if request.path == staff_feedback_message %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Staff Feedback
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
                 </li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:student_feedback_message' as student_feedback_message %}
+                    <a href="{{ student_feedback_message }}" class="nav-link {% if request.path == student_feedback_message %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Student Feedback
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
+
+                {% comment %} <li class="nav-header">LEAVES</li>
+                <li class="nav-item">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Student Leave
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Staff Leave
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li> {% endcomment %}
 
                 {% comment %} <li class="nav-header">ATTENDANCE REPORTS</li>
                 <li class="nav-item">
@@ -158,46 +200,6 @@
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             View Attendance Reports
-                        </p>
-                    </a>
-                </li> {% endcomment %}
-
-                {% comment %} <li class="nav-header">FEEDBACKS</li>
-                <li class="nav-item">
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Student Feedback
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Staff Feedback
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-header">LEAVES</li>
-                <li class="nav-item">
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Student Leave
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'student_management_system_app:add_staff' %}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Staff Leave
-                            <span class="right badge badge-danger">New</span>
                         </p>
                     </a>
                 </li> {% endcomment %}

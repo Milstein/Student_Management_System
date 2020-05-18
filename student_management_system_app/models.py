@@ -135,6 +135,10 @@ class FeedBackStudent(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
+    def get_absolute_url(self):
+        # return reverse("listing:detail", kwargs={'pk': self.id})
+        return reverse("student_management_system_app:detail", kwargs={'pk': self.id, 'slug': self.slug})
+
 
 class FeedBackStaff(models.Model):    
     # id=models.AutoField(primary_key=True)

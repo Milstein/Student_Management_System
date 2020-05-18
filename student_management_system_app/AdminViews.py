@@ -21,7 +21,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from student_management_system_app.forms import StudentCreationForm, StudentEditForm, StudentBulkUploadForm, \
     StudentBlukUploadForm
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
-    StudentBulkUpload
+    StudentBulkUpload, FeedBackStudent, FeedBackStaff
 
 
 @login_required
@@ -674,3 +674,42 @@ def download_student_csv_template(request):
     writer.writerow(['first_name', 'last_name', 'email', 'gender', 'profile_pic', 'address', 'course_name', 'session_start', 'session_end'])
 
     return response
+
+
+def staff_feedback_message(request):
+    feedbacks = FeedBackStaff.objects.all()
+    return render(request, 'student_management_system_app/admin_template/staff_feedback_message.html', { 'feedbacks' : feedbacks })
+
+
+
+@csrf_exempt
+def staff_feedback_message_replied(request):
+    feedback_id = request.POST.get("id")
+    feedback_message = request.POST.get("message")
+
+    try:
+        feedback = FeedBackStaff.objects.get(id=feedback_id)
+        feedback.feedback_reply = feedback_message
+        feedback.save()
+        return HttpResponse("True")
+    except:
+        return HttpResponse("False")
+
+
+def student_feedback_message(request):
+    feedbacks = FeedBackStudent.objects.all()
+    return render(request, 'student_management_system_app/admin_template/student_feedback_message.html', { 'feedbacks' : feedbacks })
+
+
+@csrf_exempt
+def student_feedback_message_replied(request):
+    feedback_id = request.POST.get("id")
+    feedback_message = request.POST.get("message")
+
+    try:
+        feedback = FeedBackStudent.objects.get(id=feedback_id)        
+        feedback.feedback_reply = feedback_message
+        feedback.save()
+        return HttpResponse("True")
+    except:
+        return HttpResponse("False")
