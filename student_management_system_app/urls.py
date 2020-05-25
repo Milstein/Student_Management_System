@@ -19,6 +19,7 @@ urlpatterns = [
 	path('logout_user', views.logout_user, name='logout_user'),
     path('signup/', views.SignupView.as_view(), name='signup'),
 
+    # Admin Url Paths
 	path('admin_home', AdminViews.admin_home, name='admin_home'),
 	path('add_staff', AdminViews.add_staff, name='add_staff'),
 	path('add_staff_save', AdminViews.add_staff_save, name='add_staff_save'),
@@ -66,6 +67,18 @@ urlpatterns = [
     path('student_feedback_message', AdminViews.student_feedback_message, name='student_feedback_message'),
     path('student_feedback_message_replied', AdminViews.student_feedback_message_replied, name='student_feedback_message_replied'),
 
+    path('staff_leave_view', AdminViews.staff_leave_view, name='staff_leave_view'),
+    path('staff_leave_approve/<int:pk>', AdminViews.staff_leave_approve, name='staff_leave_approve'),
+    path('staff_leave_disapprove/<int:pk>', AdminViews.staff_leave_disapprove, name='staff_leave_disapprove'),
+    path('student_leave_view', AdminViews.student_leave_view, name='student_leave_view'),
+    path('student_leave_approve/<int:pk>', AdminViews.student_leave_approve, name='student_leave_approve'),
+    path('student_leave_disapprove/<int:pk>', AdminViews.student_leave_disapprove, name='student_leave_disapprove'),
+    
+    path('admin_view_attendance_reports', AdminViews.admin_view_attendance_reports, name='admin_view_attendance_reports'),
+	path('admin_get_attendance_dates', AdminViews.admin_get_attendance_dates, name='admin_get_attendance_dates'),
+	path('admin_get_attendance_students', AdminViews.admin_get_attendance_students, name='admin_get_attendance_students'),
+    
+    # Staff Url Paths
     path('staff_home', StaffViews.staff_home, name='staff_home'),
 
     path('take_attendance', StaffViews.take_attendance, name='take_attendance'),
@@ -84,6 +97,7 @@ urlpatterns = [
     path('staff_feedback', StaffViews.staff_feedback, name='staff_feedback'),
     path('staff_feedback_save', StaffViews.staff_feedback_save, name='staff_feedback_save'),
 
+    # Student Url Paths
     path('student_home', StudentViews.student_home, name='student_home'),
     path('student_view_attendance', StudentViews.student_view_attendance, name='student_view_attendance'),
     path('view_student_attendance_data', StudentViews.view_student_attendance_data, name='view_student_attendance_data'),

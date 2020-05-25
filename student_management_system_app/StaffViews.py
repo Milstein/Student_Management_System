@@ -97,7 +97,6 @@ def get_attendance_dates(request):
     for attendance in attendances:
         data_small = { "id":attendance.id, "session_year_id": attendance.session_year_id.id, "attendance_date": str(attendance.attendance_date) }
         list_data.append(data_small)
-    print(list_data)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
 
 

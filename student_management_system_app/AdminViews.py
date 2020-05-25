@@ -4,6 +4,7 @@ from datetime import datetime
 
 import csv
 import io
+import json
 
 from django.conf import settings
 from django.contrib import messages
@@ -12,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.storage import FileSystemStorage
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -21,7 +22,8 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from student_management_system_app.forms import StudentCreationForm, StudentEditForm, StudentBulkUploadForm, \
     StudentBlukUploadForm
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
-    StudentBulkUpload, FeedBackStudent, FeedBackStaff
+    StudentBulkUpload, FeedBackStudent, FeedBackStaff, LeaveReportStudent, LeaveReportStaff, Attendance, \
+    AttendanceReport
 
 
 @login_required
@@ -159,7 +161,7 @@ def manage_session_years(request):
 #                 messages.success(request,"Successfully Added Session Year")
 #                 return redirect(reverse('student_management_system_app:add_session_year'))
 #             except Exception as e:
-#                 messages.error(request, "Failed To Add Session Year Erros: {}".format(e))
+#                 messages.error(request, "Failed To Add Session Year Errors: {}".format(e))
 #                 return redirect(reverse('student_management_system_app:add_session_year'))
 
 ########## Using Django's in-built Model CreateView - so less code to write all managed by Django ##########
@@ -676,6 +678,7 @@ def download_student_csv_template(request):
     return response
 
 
+@login_required
 def staff_feedback_message(request):
     feedbacks = FeedBackStaff.objects.all()
     return render(request, 'student_management_system_app/admin_template/staff_feedback_message.html', { 'feedbacks' : feedbacks })
@@ -696,6 +699,7 @@ def staff_feedback_message_replied(request):
         return HttpResponse("False")
 
 
+@login_required
 def student_feedback_message(request):
     feedbacks = FeedBackStudent.objects.all()
     return render(request, 'student_management_system_app/admin_template/student_feedback_message.html', { 'feedbacks' : feedbacks })
@@ -713,3 +717,106 @@ def student_feedback_message_replied(request):
         return HttpResponse("True")
     except:
         return HttpResponse("False")
+
+
+@login_required
+def staff_leave_view(request):
+    leaves = LeaveReportStaff.objects.all()
+    return render(request, 'student_management_system_app/admin_template/staff_leave_view.html', { 'leaves': leaves })
+
+
+@login_required
+def staff_leave_approve(request, pk):
+    try:
+        leave = get_object_or_404(LeaveReportStaff, pk=pk)
+        leave.leave_status = 1
+        leave.save()
+        messages.success(request,"Successfully Approved Staff Leave Request")
+        return redirect(reverse('student_management_system_app:staff_leave_view')) 
+    except Exception as e:
+        messages.error(request, "Failed To Approve Staff Leave Request Errors: {}".format(e))
+        return redirect(reverse('student_management_system_app:staff_leave_view'))
+
+
+@login_required
+def staff_leave_disapprove(request, pk):
+    try:
+        leave = get_object_or_404(LeaveReportStaff, pk=pk)
+        leave.leave_status = 2
+        leave.save()
+        messages.error(request,"Successfully Disapproved Staff Leave Request")
+        return redirect(reverse('student_management_system_app:staff_leave_view')) 
+    except Exception as e:
+        messages.error(request, "Failed To Disapprove Staff Leave Request Errors: {}".format(e))
+        return redirect(reverse('student_management_system_app:staff_leave_view'))
+
+
+@login_required
+def student_leave_view(request):
+    leaves = LeaveReportStudent.objects.all()
+    return render(request, 'student_management_system_app/admin_template/student_leave_view.html', { 'leaves': leaves })
+
+
+@login_required
+def student_leave_approve(request, pk):
+    try:
+        leave = get_object_or_404(LeaveReportStudent, pk=pk)
+        leave.leave_status = 1
+        leave.save()
+        messages.success(request,"Successfully Approved Student Leave Request")
+        return redirect(reverse('student_management_system_app:student_leave_view')) 
+    except Exception as e:
+        messages.error(request, "Failed To Approve Student Leave Request Errors: {}".format(e))
+        return redirect(reverse('student_management_system_app:student_leave_view'))
+
+
+@login_required
+def student_leave_disapprove(request, pk):
+    try:
+        leave = get_object_or_404(LeaveReportStudent, pk=pk)
+        leave.leave_status = 2
+        leave.save()
+        messages.error(request,"Successfully Disapproved Student Leave Request")
+        return redirect(reverse('student_management_system_app:student_leave_view')) 
+    except Exception as e:
+        messages.error(request, "Failed To Disapprove Student Leave Request Errors: {}".format(e))
+        return redirect(reverse('student_management_system_app:student_leave_view'))
+
+
+@login_required
+def admin_view_attendance_reports(request):
+    context = {
+        'subjects' : Subject.objects.all(),
+        'session_years' : SessionYear.objects.all()
+    }
+    return render(request, 'student_management_system_app/admin_template/admin_view_attendance_reports.html', context)
+
+
+@csrf_exempt
+def admin_get_attendance_dates(request):
+    subject_id = request.POST.get("subject")
+    session_year_id = request.POST.get("session_year")
+    subject = get_object_or_404(Subject, pk=subject_id)
+    session_year = get_object_or_404(SessionYear, pk=session_year_id)
+
+    attendances = Attendance.objects.filter(subject_id=subject, session_year_id=session_year)
+
+    list_data = []
+    for attendance in attendances:
+        data_small = { "id":attendance.id, "session_year_id": attendance.session_year_id.id, "attendance_date": str(attendance.attendance_date) }
+        list_data.append(data_small)
+    return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
+
+
+@csrf_exempt
+def admin_get_attendance_students(request):
+    attendance_date = request.POST.get('attendance_date')
+    attendance = Attendance.objects.get(id=attendance_date)
+
+    attendancereports = AttendanceReport.objects.filter(attendance_id=attendance)
+
+    list_data = []
+    for attendancereport in attendancereports:
+        data_small = { "id":attendancereport.student_id.admin.id, "name": attendancereport.student_id.admin.first_name + ' ' + attendancereport.student_id.admin.last_name, "status": attendancereport.status }
+        list_data.append(data_small)
+    return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
