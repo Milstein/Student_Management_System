@@ -16,7 +16,8 @@
         <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ user.username }}</a>
+        {% url 'student_management_system_app:student_profile' as student_profile %}
+        <a href="{{ student_profile }}" class="d-block">{{ user.username }}</a>
       </div>
     </div>
 

@@ -21,6 +21,9 @@ urlpatterns = [
 
     # Admin Url Paths
 	path('admin_home', AdminViews.admin_home, name='admin_home'),
+    path('admin_profile', AdminViews.admin_profile, name='admin_profile'),
+    path('admin_profile_save', AdminViews.admin_profile_save, name='admin_profile_save'),
+
 	path('add_staff', AdminViews.add_staff, name='add_staff'),
 	path('add_staff_save', AdminViews.add_staff_save, name='add_staff_save'),
 	path('manage_staffs', AdminViews.manage_staffs, name='manage_staffs'),
@@ -80,6 +83,8 @@ urlpatterns = [
     
     # Staff Url Paths
     path('staff_home', StaffViews.staff_home, name='staff_home'),
+    path('staff_profile', StaffViews.staff_profile, name='staff_profile'),
+    path('staff_profile_save', StaffViews.staff_profile_save, name='staff_profile_save'),
 
     path('take_attendance', StaffViews.take_attendance, name='take_attendance'),
     path('get_students', StaffViews.get_students, name='get_students'),
@@ -99,6 +104,9 @@ urlpatterns = [
 
     # Student Url Paths
     path('student_home', StudentViews.student_home, name='student_home'),
+    path('student_profile', StudentViews.student_profile, name='student_profile'),
+    path('student_profile_save', StudentViews.student_profile_save, name='student_profile_save'),
+
     path('student_view_attendance', StudentViews.student_view_attendance, name='student_view_attendance'),
     path('view_student_attendance_data', StudentViews.view_student_attendance_data, name='view_student_attendance_data'),
 

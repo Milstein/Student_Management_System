@@ -4,17 +4,56 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponse, request
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from student_management_system_app.models import Attendance, Subject, SessionYear, Student, AttendanceReport, \
-    LeaveReportStaff, Staff, FeedBackStaff
+    LeaveReportStaff, Staff, FeedBackStaff, CustomUser
 
 
 @login_required
 def staff_home(request):
     return render(request,"student_management_system_app/staff_template/staff_home.html")
+
+
+@login_required
+def staff_profile(request):
+    user = CustomUser.objects.get(id=request.user.id)
+    staff = Staff.objects.get(admin=user)
+    context = {
+        'user': user,
+        'staff': staff
+    }
+    return render(request, 'student_management_system_app/staff_template/staff_profile.html', context)
+
+
+@login_required
+def staff_profile_save(request):
+    if request.method != 'POST':
+        return redirect(reverse('student_management_system_app:staff_profile'))
+    else:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        address = request.POST.get('address')
+        try:
+            user = CustomUser.objects.get(id=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            if password is not None and password != "":
+                user.set_password(password)
+            user.save()
+
+            staff = Staff.objects.get(admin=user.id)
+            staff.address = address
+            staff.save()
+
+            messages.success(request, "Successfully updated your profile.")
+            return redirect(reverse('student_management_system_app:staff_profile'))
+        except Exception as e:
+            messages.error(request, "Failed To Update your profile Errors: {}".format(e))
+            return redirect(reverse('student_management_system_app:staff_profile'))
 
 
 @login_required

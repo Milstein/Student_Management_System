@@ -1,17 +1,56 @@
 from datetime import datetime
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
-from student_management_system_app.models import Student, Course, Subject, Attendance, AttendanceReport, \
-    LeaveReportStudent, FeedBackStudent
+from student_management_system_app.models import Student, Subject, Attendance, AttendanceReport, \
+    LeaveReportStudent, FeedBackStudent, CustomUser
 
 
 @login_required
 def student_home(request):
     return render(request,"student_management_system_app/student_template/student_home.html")
+
+
+@login_required
+def student_profile(request):
+    user = CustomUser.objects.get(id=request.user.id)
+    student = Student.objects.get(admin=user)
+    context = {
+        'user': user,
+        'student': student
+    }
+    return render(request, 'student_management_system_app/student_template/student_profile.html', context)
+
+
+@login_required
+def student_profile_save(request):
+    if request.method != 'POST':
+        return redirect(reverse('student_management_system_app:student_profile'))
+    else:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        address = request.POST.get('address')
+        try:
+            user = CustomUser.objects.get(id=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            if password is not None and password != "":
+                user.set_password(password)
+            user.save()
+
+            student = Student.objects.get(admin=user.id)
+            student.address = address
+            student.save()
+
+            messages.success(request, "Successfully updated your profile.")
+            return redirect(reverse('student_management_system_app:student_profile'))
+        except Exception as e:
+            messages.error(request, "Failed To Update your profile Errors: {}".format(e))
+            return redirect(reverse('student_management_system_app:student_profile'))
 
 
 def student_view_attendance(request):

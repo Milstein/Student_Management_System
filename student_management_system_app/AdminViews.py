@@ -31,6 +31,36 @@ def admin_home(request):
     return render(request, 'student_management_system_app/admin_template/admin_home.html')
 
 
+@login_required
+def admin_profile(request):
+    context = {
+        'user': CustomUser.objects.get(id=request.user.id)
+    }
+    return render(request, 'student_management_system_app/admin_template/admin_profile.html', context)
+
+
+@login_required
+def admin_profile_save(request):
+    if request.method != 'POST':
+        return redirect(reverse('student_management_system_app:admin_profile'))
+    else:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        try:
+            user = CustomUser.objects.get(id=request.user.id)
+            user.first_name = first_name
+            user.last_name = last_name
+            if password is not None and password != "":
+                user.set_password(password)
+            user.save()
+            messages.success(request, "Successfully updated your profile.")
+            return redirect(reverse('student_management_system_app:admin_profile'))
+        except Exception as e:
+            messages.error(request, "Failed To Update your profile Errors: {}".format(e))
+            return redirect(reverse('student_management_system_app:admin_profile'))
+
+
 @csrf_exempt
 @user_passes_test(lambda u: u.is_superuser)
 def check_email_exist(request):
