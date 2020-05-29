@@ -6,12 +6,39 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from student_management_system_app.models import Student, Subject, Attendance, AttendanceReport, \
-    LeaveReportStudent, FeedBackStudent, CustomUser
+    LeaveReportStudent, FeedBackStudent, CustomUser, Course
 
 
 @login_required
 def student_home(request):
-    return render(request,"student_management_system_app/student_template/student_home.html")
+    student = Student.objects.get(admin = request.user.id)
+    total_attendance = AttendanceReport.objects.filter(student_id=student).count()
+    presence_attendance = AttendanceReport.objects.filter(student_id=student, status=True).count()
+    absence_attendance = AttendanceReport.objects.filter(student_id=student, status=False).count()
+    course = Course.objects.get(id = student.course_id.id)
+    total_subjects = Subject.objects.filter(course_id = course).count()
+
+    subject_names = []
+    present_data = []
+    absent_data = []
+    subjects = Subject.objects.filter(course_id=student.course_id)
+    for subject in subjects:
+        attendance = Attendance.objects.filter(subject_id=subject.id)
+        attendace_present_count = AttendanceReport.objects.filter(attendance_id__in=attendance, student_id=student, status=True).count()
+        attendace_absent_count = AttendanceReport.objects.filter(attendance_id__in=attendance, student_id=student, status=False).count()
+        subject_names.append(subject.subject_name)
+        present_data.append(attendace_present_count)
+        absent_data.append(attendace_absent_count)
+    context = {
+        'total_attendance': total_attendance,
+        'presence_attendance': presence_attendance,
+        'absence_attendance': absence_attendance,
+        'total_subjects': total_subjects,
+        'subject_names' : subject_names,
+        'present_data' : present_data,
+        'absent_data' : absent_data
+    }
+    return render(request,"student_management_system_app/student_template/student_home.html", context)
 
 
 @login_required
