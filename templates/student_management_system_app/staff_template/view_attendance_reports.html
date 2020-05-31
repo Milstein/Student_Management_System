@@ -37,8 +37,9 @@ View Attendance Reports
                   <th>Subject</th>
                   <th>Session Year</th>
                   <th>Attendance Date</th>
-                  <th>Created At</th>
-                  <th>Updated At</th>
+                  <th>Status</th>
+                  {% comment %} <th>Created At</th>
+                  <th>Updated At</th> {% endcomment %}
                 </tr>
               </thead>
               <tbody>
@@ -50,8 +51,13 @@ View Attendance Reports
                     <td>{{ attendance.attendance_id.subject_id }}</td>
                     <td>{{ attendance.attendance_id.session_year_id }}</td>
                     <td>{{ attendance.attendance_id.attendance_date }}</td>
-                    <td>{{ attendance.created_at }}</td>
-                    <td>{{ attendance.updated_at }}</td>
+                    {% if attendance.status == True %}
+                    <td><b>[Present]</b></td>
+                    {% else %}
+                    <td><b>[Absent]</b></td>
+                    {%endif%}
+                    {% comment %} <td>{{ attendance.created_at }}</td>
+                    <td>{{ attendance.updated_at }}</td> {% endcomment %}
                   </tr>
                   {% endfor %}
                 {% else %}

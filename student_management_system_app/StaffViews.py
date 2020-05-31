@@ -8,13 +8,72 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
-from student_management_system_app.models import Attendance, Subject, SessionYear, Student, AttendanceReport, \
-    LeaveReportStaff, Staff, FeedBackStaff, CustomUser
+from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, LeaveReportStaff, SessionYear, Staff, Student, Subject
 
 
 @login_required
 def staff_home(request):
-    return render(request,"student_management_system_app/staff_template/staff_home.html")
+    # To fetch all Students Under Current Staff
+    subjects = Subject.objects.filter(staff_id=request.user.id)
+    course_id_list = []
+    for subject in subjects:
+        course = Course.objects.get(id=subject.course_id.id)
+        course_id_list.append(course.id)
+
+    # To get only unique Courses
+    final_courses = set(course_id_list)
+
+    total_students = Student.objects.filter(course_id__in=final_courses).count()
+
+    # To fetch all Attendance Count
+    attendance_count = Attendance.objects.filter(subject_id__in=subjects).count()
+
+    # To fetch all Approved Leave Count
+    staff = Staff.objects.get(admin=request.user.id)
+    approved_leave_count = LeaveReportStaff.objects.filter(staff_id=staff.id).count()
+
+    # Total Subjects Count
+    total_subjects = subjects.count()
+
+    # To fetch Attendance Data by Subject 
+    subject_list = []
+    present_attendance_by_subject_count_list = []
+    absent_attendance_by_subject_count_list = []
+    for subject in subjects:
+        attendance = Attendance.objects.filter(subject_id=subject.id)        
+        attendancereport_present_count = AttendanceReport.objects.filter(attendance_id__in=attendance, status=True).count()
+        attendancereport_absent_count = AttendanceReport.objects.filter(attendance_id__in=attendance, status=False).count()
+        if attendancereport_present_count > 0 or attendancereport_absent_count > 0:
+            subject_list.append(subject.subject_name)
+            present_attendance_by_subject_count_list.append(attendancereport_present_count)
+            absent_attendance_by_subject_count_list.append(attendancereport_absent_count)
+
+    # To fetch Attendance Data by Student
+    students = Student.objects.filter(course_id__in=final_courses)
+    student_list = []
+    present_attendance_by_student_count_list = []
+    absent_attendance_by_student_count_list = []
+    for student in students:
+        attendancereport_present_count = AttendanceReport.objects.filter(student_id=student.id, status=True).count()
+        attendancereport_absent_count = AttendanceReport.objects.filter(student_id=student.id, status=False).count()
+        if attendancereport_present_count > 0 or attendancereport_absent_count > 0:
+            student_list.append(student.admin.first_name + ' ' + student.admin.last_name)
+            present_attendance_by_student_count_list.append(attendancereport_present_count)
+            absent_attendance_by_student_count_list.append(attendancereport_absent_count)
+
+    context = {
+        'total_students': total_students,
+        'attendance_count': attendance_count,
+        'approved_leave_count': approved_leave_count,
+        'total_subjects': total_subjects,
+        'subject_list': subject_list,
+        'present_attendance_by_subject_count_list': present_attendance_by_subject_count_list,
+        'absent_attendance_by_subject_count_list': absent_attendance_by_subject_count_list,
+        'student_list': student_list,
+        'present_attendance_by_student_count_list': present_attendance_by_student_count_list,
+        'absent_attendance_by_student_count_list': absent_attendance_by_student_count_list
+    }
+    return render(request, "student_management_system_app/staff_template/staff_home.html", context)
 
 
 @login_required
@@ -110,7 +169,7 @@ def save_attendance_data(request):
 
 @login_required
 def view_attendance_reports(request):
-    attendances = AttendanceReport.objects.filter(status=True, attendance_id__subject_id__staff_id=request.user)
+    attendances = AttendanceReport.objects.filter(attendance_id__subject_id__staff_id=request.user)
     return render(request, 'student_management_system_app/staff_template/view_attendance_reports.html', {"attendances":attendances})
 
 
