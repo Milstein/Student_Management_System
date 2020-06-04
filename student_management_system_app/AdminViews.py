@@ -28,7 +28,85 @@ from student_management_system_app.models import CustomUser, Course, Subject, St
 
 @login_required
 def admin_home(request):
-    return render(request, 'student_management_system_app/admin_template/admin_home.html')
+    total_students = Student.objects.all().count()
+    total_staffs = Staff.objects.all().count()
+    total_subjects = Subject.objects.all().count()
+    total_courses = Course.objects.all().count()
+
+    courses = Course.objects.all()
+    course_name_list = []
+    subject_count_list = []
+    student_course_name_list = []
+    student_count_list = []    
+    for course in courses:
+        # To fetch Course's Subject Data
+        subject_count = Subject.objects.filter(course_id=course.id).count()
+        if subject_count > 0:
+            course_name_list.append(course.course_name)
+            subject_count_list.append(subject_count)
+
+        # To fetch Student's Course Data
+        student_count = Student.objects.filter(course_id=course.id).count()
+        if student_count > 0:
+            student_course_name_list.append(course.course_name)
+            student_count_list.append(student_count)
+
+    # To fetch Subject Data
+    student_subject_name_list = []
+    student_count_list_in_subject = []
+    subjects = Subject.objects.all()
+    for subject in subjects:
+        student_count_in_subject = Student.objects.filter(course_id=subject.course_id).count()
+        if student_count_in_subject > 0:
+            student_subject_name_list.append(subject.subject_name)
+            student_count_list_in_subject.append(student_count_in_subject)
+
+    # To fetch Staff Data Attendance VS Leaves
+    staff_attendance_list = []
+    staff_leaves_list = []
+    staff_names_list = []
+
+    staffs = Staff.objects.all()
+    for staff in staffs:
+        subjects = Subject.objects.filter(staff_id=staff.admin.id)
+        total_attendance = Attendance.objects.filter(subject_id__in=subjects).count()
+        total_leaves = LeaveReportStaff.objects.filter(staff_id=staff.id, leave_status=True).count()
+        staff_names_list.append(staff.admin.get_full_name())
+        staff_attendance_list.append(total_attendance)
+        staff_leaves_list.append(total_leaves)
+
+    # To fetch Attendance Data by Student
+    students = Student.objects.all()
+    student_list = []
+    present_attendance_by_student_count_list = []
+    absent_attendance_by_student_count_list = []
+    for student in students:
+        attendancereport_present_count = AttendanceReport.objects.filter(student_id=student.id, status=True).count()
+        attendancereport_absent_count = AttendanceReport.objects.filter(student_id=student.id, status=False).count()
+        if attendancereport_present_count > 0 or attendancereport_absent_count > 0:
+            student_list.append(student.admin.get_full_name())
+            present_attendance_by_student_count_list.append(attendancereport_present_count)
+            absent_attendance_by_student_count_list.append(attendancereport_absent_count)
+      
+    context = {
+        'total_students': total_students,
+        'total_staffs': total_staffs,
+        'total_subjects': total_subjects,
+        'total_courses': total_courses,
+        'course_name_list': course_name_list,
+        'subject_count_list': subject_count_list,
+        'student_course_name_list': student_course_name_list,
+        'student_count_list': student_count_list,
+        'student_subject_name_list': student_subject_name_list,
+        'student_count_list_in_subject': student_count_list_in_subject,
+        'staff_names_list': staff_names_list,
+        'staff_attendance_list': staff_attendance_list,
+        'staff_leaves_list': staff_leaves_list,
+        'student_list': student_list,
+        'present_attendance_by_student_count_list': present_attendance_by_student_count_list,
+        'absent_attendance_by_student_count_list': absent_attendance_by_student_count_list       
+    }
+    return render(request, 'student_management_system_app/admin_template/admin_home.html', context)
 
 
 @login_required
@@ -847,6 +925,6 @@ def admin_get_attendance_students(request):
 
     list_data = []
     for attendancereport in attendancereports:
-        data_small = { "id":attendancereport.student_id.admin.id, "name": attendancereport.student_id.admin.first_name + ' ' + attendancereport.student_id.admin.last_name, "status": attendancereport.status }
+        data_small = { "id":attendancereport.student_id.admin.id, "name": attendancereport.student_id.admin.get_full_name(), "status": attendancereport.status }
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)

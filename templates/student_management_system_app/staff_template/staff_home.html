@@ -195,24 +195,7 @@ Home
 
       //---------------------
       //- STACKED BAR CHART -
-      //---------------------
-      var stackedBarChartOptions = {
-        responsive              : true,
-        maintainAspectRatio     : false,
-        scales: {
-          xAxes: [{
-            stacked: true,
-          }],
-          yAxes: [{
-            stacked: true,
-            ticks: {
-                // max: 5,
-                min: 0,
-                stepSize: 1
-            }
-          }]
-        }
-      }
+      //---------------------      
       var subjects = {{ subject_list|safe }};
       var present_attendance_by_subject_count = {{ present_attendance_by_subject_count_list }};
       var absent_attendance_by_subject_count = {{ absent_attendance_by_subject_count_list }};
@@ -242,6 +225,24 @@ Home
             data                : absent_attendance_by_subject_count
           },  
         ]
+      }
+      
+      var stackedBarChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        scales: {
+          xAxes: [{
+            stacked: true,
+          }],
+          yAxes: [{
+            stacked: true,
+            ticks: {
+                // max: 5,
+                min: 0,
+                stepSize: 1
+            }
+          }]
+        }
       }
 
       var stackedBarChartCanvas = $('#subject_stackedBarChart').get(0).getContext('2d')

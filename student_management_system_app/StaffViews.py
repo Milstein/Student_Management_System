@@ -20,7 +20,7 @@ def staff_home(request):
         course = Course.objects.get(id=subject.course_id.id)
         course_id_list.append(course.id)
 
-    # To get only unique Courses
+    # To get only unique Courses associated with Staff
     final_courses = set(course_id_list)
 
     total_students = Student.objects.filter(course_id__in=final_courses).count()
@@ -57,7 +57,7 @@ def staff_home(request):
         attendancereport_present_count = AttendanceReport.objects.filter(student_id=student.id, status=True).count()
         attendancereport_absent_count = AttendanceReport.objects.filter(student_id=student.id, status=False).count()
         if attendancereport_present_count > 0 or attendancereport_absent_count > 0:
-            student_list.append(student.admin.first_name + ' ' + student.admin.last_name)
+            student_list.append(student.admin.get_full_name())
             present_attendance_by_student_count_list.append(attendancereport_present_count)
             absent_attendance_by_student_count_list.append(attendancereport_absent_count)
 
@@ -136,7 +136,7 @@ def get_students(request):
     # student_data = serializers.serialize('python', students)
     list_data = []
     for student in students:
-        data_small = { "id":student.admin.id, "name": student.admin.first_name + ' ' + student.admin.last_name }
+        data_small = { "id":student.admin.id, "name": student.admin.get_full_name() }
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
 
@@ -207,7 +207,7 @@ def get_attendance_students(request):
 
     list_data = []
     for attendancereport in attendancereports:
-        data_small = { "id":attendancereport.student_id.admin.id, "name": attendancereport.student_id.admin.first_name + ' ' + attendancereport.student_id.admin.last_name, "status": attendancereport.status }
+        data_small = { "id":attendancereport.student_id.admin.id, "name": attendancereport.student_id.admin.get_full_name(), "status": attendancereport.status }
         list_data.append(data_small)
     return JsonResponse(json.dumps(list_data), content_type="application/json", safe=False)
 
