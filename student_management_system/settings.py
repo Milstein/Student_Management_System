@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,8 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'student_management_system_app.LoginCheckMiddleWare.LoginCheckMiddleWare',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+	'student_management_system_app.LoginCheckMiddleWare.LoginCheckMiddleWare',    
 ]
 
 ROOT_URLCONF = 'student_management_system.urls'
