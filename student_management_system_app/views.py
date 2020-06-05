@@ -12,9 +12,6 @@ from student_management_system_app.EmailBackEnd import EmailBackEnd
 from student_management_system_app.models import CustomUser
 
 
-def showDemoPage(request):
-    return render(request, 'student_management_system_app/demo.html')
-
 class HomePageView(LoginRequiredMixin, ListView):
     model = CustomUser
     template_name = 'student_management_system_app/index.html'

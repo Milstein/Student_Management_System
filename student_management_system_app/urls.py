@@ -10,8 +10,7 @@ from . import views
 # My name space
 app_name = 'student_management_system_app'
 
-urlpatterns = [
-    # path('demo', views.showDemoPage),    
+urlpatterns = [    
     path('', views.HomePageView.as_view(), name='home'),
     # path('show_login', views.show_login, name='show_login'),
     path('login_user', views.login_user, name='login_user'),
