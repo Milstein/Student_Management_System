@@ -30,8 +30,8 @@
 	set git remote heroku to https://git.heroku.com/milsteinsms.git
 14. `git add .`
 15. `git commit -m "First Commit"`
-16. `heroku config:set DISABLE_COLLECTSTATIC=1` this will disable to run collectstatic on each deployment
-	other wise you can run `heroku run python manage.py collectstatic`
+16. `heroku config:set DISABLE_COLLECTSTATIC=1` this will disable to run collectstatic on each deployment (by default this way it works!)
+	other wise you can run `heroku run python manage.py collectstatic` 
 17. `git push heroku master` or if you want to push your local branch to heroku's master branch then use: 
 	`git push -f heroku <Your Local Branch Name>:master` i.e. `git push -f heroku deploy_to_Heroku:master`
 
