@@ -31,8 +31,8 @@
 14. `git add .`
 15. `git commit -m "First Commit"`
 16. `heroku config:set DISABLE_COLLECTSTATIC=1`
-17. `git push heroku master`
--- Here we are pushing the migrated files `student_management_system_app\migrations\0001_initial.py` so we don't need to run makemigrations on heroku as this showing some errors! remove this file from the git ignore if already included as ignored file while pushing.
+17. `git push heroku master` or if you want to push your local branch to heroku's master branch then use: 
+	`git push -f heroku <Your Local Branch Name>:master` i.e. `git push -f heroku deploy_to_Heroku:master`
 
 19. heroku run python manage.py migrate
 20. heroku run python manage.py createsuperuser
