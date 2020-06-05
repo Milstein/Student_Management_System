@@ -1,0 +1,44 @@
+1. Change the DB in settings.py as sqlite
+2. Download Heroku CLI
+3. Create `Procfile` in project root folder : where you specify the gunicorn i.e. `web: gunicorn student_management_system.wsgi --log-file -`
+4. Create `runtime.txt` file to specify the python version i.e. `python-3.8.2`
+5. From activated virtual environment, login to heroku in command line terminal by typing: `heroku login` 
+	- This will open borwser and activate your login to CLI
+6. pip install gunicorn dj-database-url whitenoise psycopg2
+7. Update your requirements.txt file with `pip freeze > requirements.txt`
+8. Add some settings in settings.py file:
+	a. `STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'`
+	b. Add a new entry in MIDDLEWARE = [] of `'whitenoise.middleware.WhiteNoiseMiddleware',`
+	c. database settings:
+		import dj_database_url
+		prod_db = dj_database_url.config(conn_max_age=500)
+		DATABASES['default'].update(prod_db)
+		
+9. Create heroku project by: `heroku create PROJECT_NAME` i.e.`heroku create milsteinsms`
+
+	(venv) E:\!Some Projects To Work On\milson_student_mgmt_system>heroku create milsteinsms
+	Creating ⬢ milsteinsms... done
+	https://milsteinsms.herokuapp.com/ | https://git.heroku.com/milsteinsms.git
+	
+10. The newly created domain name need to be placed in settings.py file:
+	ALLOWED_HOSTS = ['milsteinsms.herokuapp.com']
+11. Remove all migrations generated files inside migrations folder only keep `__init__.py` file.
+
+12. `git init`
+13. `heroku git:remote -a milsteinsms`
+	(venv) E:\!Some Projects To Work On\milson_student_mgmt_system>heroku git:remote milsteinsms
+	set git remote heroku to https://git.heroku.com/milsteinsms.git
+14. `git add .`
+15. `git commit -m "First Commit"`
+16. `heroku config:set DISABLE_COLLECTSTATIC=1`
+17. `git push heroku master`
+-- Here we are pushing the migrated files `student_management_system_app\migrations\0001_initial.py` so we don't need to run makemigrations on heroku as this showing some errors! remove this file from the git ignore if already included as ignored file while pushing.
+
+19. heroku run python manage.py migrate
+20. heroku run python manage.py createsuperuser
+
+---------------------------
+SOme helpful heroku commands:
+- heroku run rake db:migrate
+- heroku restart
+- heroku logs --tail
