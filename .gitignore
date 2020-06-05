@@ -1,5 +1,4 @@
 *.map
-*~HEAD
 *.bak
 *.log
 ./logs
@@ -41,3 +40,5 @@ __pycache__
 local_settings.py
 db.sqlite3
 media
+*~HEAD
+*.css~HEAD
