@@ -42,4 +42,3 @@ db.sqlite3
 media
 *~HEAD
 *.css~HEAD
-/student_management_system_app/migrations/0001_initial.py
