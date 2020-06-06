@@ -24,6 +24,7 @@ from student_management_system_app.forms import StudentCreationForm, StudentEdit
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
     StudentBulkUpload, FeedBackStudent, FeedBackStaff, LeaveReportStudent, LeaveReportStaff, Attendance, \
     AttendanceReport
+from django import forms
 
 
 class DateInput(forms.DateInput):
@@ -281,11 +282,13 @@ class SessionYearCreateView(LoginRequiredMixin, CreateView):
     model = SessionYear
     template_name ='student_management_system_app/admin_template/add_session_year.html'
     fields = ['session_start', 'session_end']
-    widgets = {
-        'session_start': DateInput(),
-        'session_end': DateInput()
-    }
     # success_url = '/'
+
+    def get_form(self, form_class=None):
+        form = super(SessionYearCreateView, self).get_form(form_class)
+        form.fields['session_start'].widget = DateInput()
+        form.fields['session_end'].widget = DateInput()
+        return form
 
     def form_valid(self, form):
         form.save(commit=True)
@@ -297,11 +300,13 @@ class SessionYearUpdateView(LoginRequiredMixin, UpdateView):
     model = SessionYear
     template_name ='student_management_system_app/admin_template/edit_session_year.html'
     fields = ['session_start', 'session_end']
-    widgets = {
-        'session_start': DateInput(),
-        'session_end': DateInput()
-    }
     # success_url = '/'
+
+    def get_form(self, form_class=None):
+        form = super(SessionYearUpdateView, self).get_form(form_class)
+        form.fields['session_start'].widget = DateInput()
+        form.fields['session_end'].widget = DateInput()
+        return form
 
     def form_valid(self, form):
         instance = form.save()
