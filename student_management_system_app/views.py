@@ -63,3 +63,31 @@ class SignupView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('student_management_system_app:home')
+
+
+def show_firebase_server_worker(request):
+    response = 'importScripts("https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js");' \
+        'importScripts("https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js");' \
+        'const firebaseConfig = {' \
+        '    apiKey: "AIzaSyDNwB2NsBw1UOH4_w3VSNNfQKH946HkT5c",' \
+        '    authDomain: "studentmanagementsystem-379fd.firebaseapp.com",' \
+        '    databaseURL: "https://studentmanagementsystem-379fd.firebaseio.com",' \
+        '    projectId: "studentmanagementsystem-379fd",' \
+        '    storageBucket: "studentmanagementsystem-379fd.appspot.com",' \
+        '    messagingSenderId: "915561761420",' \
+        '    appId: "1:915561761420:web:26c3c7bc8dfffbf36309a9",' \
+        '    measurementId: "G-19Y529Q293"' \
+        '  };' \
+        'firebase.initializeApp(firebaseConfig);' \
+        'const messaging = firebase.messaging();' \
+        'messaging.setBackgroundMessageHandler(function(payload){' \
+        '    console.log(payload);' \
+        '    const notification = JSON.parse(payload);' \
+        '    const notificationOptions={' \
+        '      body: notification.body,' \
+        '      icon: notification.icon' \
+        '    };' \
+        '    return self.ServiceWorkerRegistration.showNotification(notification.title, notificationOptions);' \
+        '});'
+
+    return HttpResponse(response)

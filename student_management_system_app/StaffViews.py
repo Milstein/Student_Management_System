@@ -8,7 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
-from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, LeaveReportStaff, SessionYear, Staff, Student, Subject
+from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, \
+    LeaveReportStaff, SessionYear, Staff, Student, Subject, NotificationStaff
 
 
 @login_required
@@ -315,3 +316,22 @@ def staff_feedback_save(request):
         except Exception as e:
             messages.error(request,"Failed to Leave a Feedback Message {}".format(e))
             return redirect("student_management_system_app:staff_feedback")
+
+
+@csrf_exempt
+def staff_fcm_token_save(request):
+    try:
+        token = request.POST.get('token')
+        staff = Staff.objects.get(admin=request.user.id)
+        staff.fcm_token = token
+        staff.save()
+        return HttpResponse('True')
+    except:
+        return HttpResponse('False')
+
+
+def staff_all_notifications(request):
+    staff = Staff.objects.get(admin=request.user.id)
+    notifications = NotificationStaff.objects.filter(staff_id=staff.id)
+    return render(request, 'student_management_system_app/staff_template/all_notifications.html',
+                  {'notifications': notifications})

@@ -60,6 +60,17 @@
           </a>
         </li>
 
+        <li class="nav-header">NOTIFICATIONS</li>
+        <li class="nav-item">
+            {% url 'student_management_system_app:staff_all_notifications' as staff_all_notifications %}
+            <a href="{{ staff_all_notifications }}" class="nav-link {% if request.path == staff_all_notifications %}active{% endif %}">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                    Your Notifications
+                </p>
+            </a>
+        </li>
+
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

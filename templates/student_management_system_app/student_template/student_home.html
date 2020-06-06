@@ -230,4 +230,97 @@ Home
     }
   })
 </script>
+
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script
+<script type="text/javascript">
+        // TODO: Replace the following with your app's Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNwB2NsBw1UOH4_w3VSNNfQKH946HkT5c",
+            authDomain: "studentmanagementsystem-379fd.firebaseapp.com",
+            databaseURL: "https://studentmanagementsystem-379fd.firebaseio.com",
+            projectId: "studentmanagementsystem-379fd",
+            storageBucket: "studentmanagementsystem-379fd.appspot.com",
+            messagingSenderId: "915561761420",
+            appId: "1:915561761420:web:26c3c7bc8dfffbf36309a9",
+            measurementId: "G-19Y529Q293"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Retrieve Firebase Messaging object.
+        const messaging = firebase.messaging();
+
+        function InitializeFireBaseMessaging(){
+            messaging
+                .requestPermission()
+                .then(function(){
+                    console.log("Notification Permission");
+                    return messaging.getToken();
+                })
+                .then(function(currentToken){
+                    console.log("Token : " + currentToken);
+                    sendToServer(currentToken);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        }
+
+        messaging.onMessage(function(payload){
+            console.log(payload);
+            const notificationOptions={
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            };
+
+            if(Notification.permission==="granted"){
+                var notification = new Notification(payload.notification.title, notificationOptions);
+
+                notification.onclick = function(ev){
+                    ev.preventDefault();
+                    window.open(payload.notification.click_action, '_blank');
+                    notification.close();
+                }
+            }
+        });
+        messaging.onTokenRefresh(function(){
+            messaging.getToken()
+                .then(function(refreshedToken){
+                    console.log("New Token : " + refreshedToken);
+                    sendToServer(refreshedToken);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+
+        });
+
+        function sendToServer(token){
+          $.ajax({
+                url: "{% url 'student_management_system_app:student_fcm_token_save'%}",
+                type: 'POST',
+                data: {
+                  token: token
+                },
+                datatype: 'json'
+              })
+              .done(function (response) {
+                // console.log(response);
+                if (response == "True") {
+                  console.log("Token saved.")
+                } else {
+                  console.log("Error while saving Token!")
+                }
+              })
+              .fail(function (jqXHR, textStatus, errorThrown) {
+                alert("Error while saving Token!");
+              })
+          });
+        }
+
+        InitializeFireBaseMessaging();
+
+</script>
 {% endblock custom_js %}

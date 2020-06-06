@@ -80,6 +80,12 @@ urlpatterns = [
 	path('admin_get_attendance_dates', AdminViews.admin_get_attendance_dates, name='admin_get_attendance_dates'),
 	path('admin_get_attendance_students', AdminViews.admin_get_attendance_students, name='admin_get_attendance_students'),
     
+    # Firebase Push Notification
+    path('admin_send_notification_to_staff', AdminViews.admin_send_notification_to_staff, name='admin_send_notification_to_staff'),
+    path('admin_send_notification_to_student', AdminViews.admin_send_notification_to_student, name='admin_send_notification_to_student'),
+    path('send_staff_notification', AdminViews.send_staff_notification, name='send_staff_notification'),
+    path('send_student_notification', AdminViews.send_student_notification, name='send_student_notification'),
+
     # Staff Url Paths
     path('staff_home', StaffViews.staff_home, name='staff_home'),
     path('staff_profile', StaffViews.staff_profile, name='staff_profile'),
@@ -115,5 +121,12 @@ urlpatterns = [
     path('student_feedback', StudentViews.student_feedback, name='student_feedback'),
     path('student_feedback_save', StudentViews.student_feedback_save, name='student_feedback_save'),
 
+    # For Firebase push notifications
+    path('staff_fcm_token_save', StaffViews.staff_fcm_token_save, name='staff_fcm_token_save'),
+    path('staff_all_notifications', StaffViews.staff_all_notifications, name='staff_all_notifications'),
+    path('student_fcm_token_save', StudentViews.student_fcm_token_save, name='student_fcm_token_save'),
+    path('student_all_notifications', StudentViews.student_all_notifications, name='student_all_notifications'),
+    
+    path('firebase-messaging-sw.js', views.show_firebase_server_worker, name='show_firebase_server_worker'),
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
