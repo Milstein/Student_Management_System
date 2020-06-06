@@ -125,7 +125,7 @@ Student Notification
   $(".show_notification").click(function () {
     var student_id = $(this).parents("tr").children("td:eq(0)").text();
     var student_name = $(this).parents("tr").children("td:eq(3)").text();
-    $("#student_id") = student_id;
+    $("#student_id").val(student_id);
     $(".name_span").text(student_name);
   });
 

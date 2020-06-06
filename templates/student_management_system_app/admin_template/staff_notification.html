@@ -110,7 +110,7 @@ Staff Notification
   $(".show_notification").click(function () {
     var staff_id = $(this).parents("tr").children("td:eq(0)").text();
     var staff_name = $(this).parents("tr").children("td:eq(3)").text();
-    $("#staff_id") = staff_id;
+    $("#staff_id").val(staff_id);
     $(".name_span").text(staff_name);
   });
 
