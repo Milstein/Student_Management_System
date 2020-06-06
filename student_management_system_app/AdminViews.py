@@ -26,6 +26,10 @@ from student_management_system_app.models import CustomUser, Course, Subject, St
     AttendanceReport
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 @login_required
 def admin_home(request):
     total_students = Student.objects.all().count()
@@ -277,6 +281,10 @@ class SessionYearCreateView(LoginRequiredMixin, CreateView):
     model = SessionYear
     template_name ='student_management_system_app/admin_template/add_session_year.html'
     fields = ['session_start', 'session_end']
+    widgets = {
+        'session_start': DateInput(),
+        'session_end': DateInput()
+    }
     # success_url = '/'
 
     def form_valid(self, form):
@@ -289,6 +297,10 @@ class SessionYearUpdateView(LoginRequiredMixin, UpdateView):
     model = SessionYear
     template_name ='student_management_system_app/admin_template/edit_session_year.html'
     fields = ['session_start', 'session_end']
+    widgets = {
+        'session_start': DateInput(),
+        'session_end': DateInput()
+    }
     # success_url = '/'
 
     def form_valid(self, form):
