@@ -174,6 +174,6 @@ def student_fcm_token_save(request):
 
 def student_all_notifications(request):
     student = Student.objects.get(admin=request.user.id)
-    notifications = NotificationStudent.objects.filter(student_id=student.id)
+    notifications = NotificationStudent.objects.filter(student_id=student.id).order_by('-created_at')
     return render(request, 'student_management_system_app/student_template/all_notifications.html',
                   {'notifications': notifications})

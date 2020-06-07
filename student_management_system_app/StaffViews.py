@@ -332,6 +332,6 @@ def staff_fcm_token_save(request):
 
 def staff_all_notifications(request):
     staff = Staff.objects.get(admin=request.user.id)
-    notifications = NotificationStaff.objects.filter(staff_id=staff.id)
+    notifications = NotificationStaff.objects.filter(staff_id=staff.id).order_by('-created_at')
     return render(request, 'student_management_system_app/staff_template/all_notifications.html',
                   {'notifications': notifications})
