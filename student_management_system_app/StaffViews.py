@@ -8,7 +8,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
-from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, LeaveReportStaff, SessionYear, Staff, Student, Subject, StudentResult
+from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, \
+    LeaveReportStaff, SessionYear, Staff, Student, Subject, StudentResult
 
 
 @login_required
