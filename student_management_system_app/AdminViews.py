@@ -1,11 +1,9 @@
+import csv
+import json
 import os
-
 from datetime import datetime
 
-import csv
-import io
-import json
-
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -24,7 +22,6 @@ from student_management_system_app.forms import StudentCreationForm, StudentEdit
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
     StudentBulkUpload, FeedBackStudent, FeedBackStaff, LeaveReportStudent, LeaveReportStaff, Attendance, \
     AttendanceReport
-from django import forms
 
 
 class DateInput(forms.DateInput):
