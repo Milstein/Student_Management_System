@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from student_management_system_app.models import Attendance, AttendanceReport, Course, CustomUser, FeedBackStaff, \
-    LeaveReportStaff, SessionYear, Staff, Student, Subject, NotificationStaff
+    LeaveReportStaff, SessionYear, Staff, Student, Subject, NotificationStaff, StudentResult
 
 
 @login_required
@@ -330,8 +330,49 @@ def staff_fcm_token_save(request):
         return HttpResponse('False')
 
 
+@login_required
 def staff_all_notifications(request):
     staff = Staff.objects.get(admin=request.user.id)
     notifications = NotificationStaff.objects.filter(staff_id=staff.id).order_by('-created_at')
     return render(request, 'student_management_system_app/staff_template/all_notifications.html',
                   {'notifications': notifications})
+				  
+
+@login_required
+def staff_add_result(request):
+    context = {
+        'subjects' : Subject.objects.filter(staff_id=request.user.id),
+        'session_years' : SessionYear.objects.all()
+    }
+    return render(request, 'student_management_system_app/staff_template/staff_add_result.html', context)
+
+
+@login_required
+def staff_save_student_result(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        subject_id = request.POST.get("subject")
+        student_admin_id = request.POST.get("student_list")        
+        exam_marks = request.POST.get("exam_marks")
+        assignment_marks = request.POST.get("assignment_marks")        
+
+        student = Student.objects.get(admin=student_admin_id)
+        subject = Subject.objects.get(id=subject_id)
+        try:
+            check_exist = StudentResult.objects.filter(student_id=student, subject_id=subject).exists()
+            if check_exist:
+                result = StudentResult(student_id=student, subject_id=subject, subject_exam_marks=exam_marks, subject_assignment_marks=assignment_marks)
+                result.exam_marks = exam_marks
+                result.assignment_marks = assignment_marks
+                result.save()
+                messages.success(request, 'Successfully Updated Student Result')
+                return redirect(reverse("student_management_system_app:staff_add_result"))
+            else:
+                result = StudentResult(student_id=student, subject_id=subject, subject_exam_marks=exam_marks, subject_assignment_marks=assignment_marks)
+                result.save()
+                messages.success(request, 'Successfully Added Student Result')
+                return redirect(reverse("student_management_system_app:staff_add_result"))
+        except Exception as e:
+            messages.error(request,"Failed to Add Student Result {}".format(e))
+            return redirect(reverse("student_management_system_app:staff_add_result"))

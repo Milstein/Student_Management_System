@@ -172,6 +172,7 @@ def student_fcm_token_save(request):
         return HttpResponse('False')
 
 
+@login_required
 def student_all_notifications(request):
     student = Student.objects.get(admin=request.user.id)
     notifications = NotificationStudent.objects.filter(student_id=student.id).order_by('-created_at')
