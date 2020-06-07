@@ -979,7 +979,7 @@ def send_staff_notification(request):
     }
     response = requests.post(url, data=json.dumps(body), headers=headers)
     print(response.text)
-    notification = NotificationStaff(staff_id=staff_id, message=message)
+    notification = NotificationStaff(staff_id=staff, message=message)
     notification.save()
     return HttpResponse("True")
 
@@ -1003,6 +1003,6 @@ def send_student_notification(request):
     }
     response = requests.post(url, data=json.dumps(body), headers=headers)
     print(response.text)
-    notification = NotificationStudent(student_id=student_id, message=message)
+    notification = NotificationStudent(student_id=student, message=message)
     notification.save()
     return HttpResponse("True")
