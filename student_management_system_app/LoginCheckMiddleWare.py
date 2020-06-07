@@ -3,7 +3,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
 
 
-class LoginCheckMiddleWare(MiddlewareMixin):
+class LoginCheckMiddleware(MiddlewareMixin):
 
     def process_view(self,request,view_func,view_args,view_kwargs):
         modulename=view_func.__module__
