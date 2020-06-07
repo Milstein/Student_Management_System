@@ -1,0 +1,137 @@
+{% extends 'student_management_system_app/staff_template/base_template.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Add Student Results{% endblock title %}
+
+{% block page_title %}
+Add Student Results
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+
+        <form action="{% url 'student_management_system_app:staff_save_student_result' %}" method="POST">
+          {% csrf_token %}
+          <!-- general form elements -->
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Results</h3>
+            </div>
+            <!-- /.card-header -->
+
+            <!-- form start -->
+            <div class="card-body">
+              <div class="form-group">
+                <label>Subject</label>
+                <select class="form-control" name="subject" id="subject">
+                  {% for subject in subjects %}
+                  <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Session Year</label>
+                <select class="form-control" name="session_year" id="session_year">
+                  {% for session_year in session_years %}
+                  <option value="{{ session_year.id }}">{{ session_year.session_start }} TO
+                    {{ session_year.session_end }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary btn-block" id="fetch_students">Fetch Students</button>
+            </div>
+
+            <div id="student_data" class="card-footer" style="display:none;">
+
+            </div>
+
+            <div class="form-group">
+              <div id="empty_student" class="alert alert-warning alert-dismissible" style="display:none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h5><i class="icon fas fa-exclamation-triangle"></i>Alert!</h5>
+                No Student Data Found!
+              </div>
+            </div>
+
+          </div>
+          <!-- /.card -->
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+  $(document).ready(function () {
+    $('#fetch_students').click(function () {
+      var subject = $("#subject").val();
+      var session_year = $("#session_year").val();
+
+      $.ajax({
+          url: "{% url 'student_management_system_app:get_students'%}",
+          type: 'POST',
+          data: {
+            subject: subject,
+            session_year: session_year
+          },
+          datatype: 'json'
+        })
+        .done(function (response) {
+          var json_data = JSON.parse(response);
+          // console.log(json_data);
+          if (json_data.length > 0) {
+            var div_data =
+              '<div class="form-group"><label>Student List</label><select class="student_list form-control" name="student_list">';
+            for (key in json_data) {
+              div_data +=
+                "<option name='student_data[]' value=" + json_data[key].id +
+                "> ID : " + json_data[key].id + " : " + json_data[key].name + "</option>";
+            }
+            div_data += '</select></div>';
+
+            div_data += '<div class="form-group">';
+            div_data += '<div class="row">';            
+            div_data += '<div class="col-lg-6">';
+            div_data += '<label>Exam Marks </label> <input type="text" class="form-control" name="exam_marks" id="exam_marks" placeholder="Enter Exam Marks" required>';
+            div_data += '</div>';
+            div_data += '<div class="col-lg-6">';
+            div_data += '<label>Assignment Marks </label> <input type="text" class="form-control" name="assignment_marks" id="assignment_marks" placeholder="Enter Assignment Marks" required>';
+            div_data += '</div>';
+            div_data += '</div>';
+            div_data += '</div>';
+
+            div_data += '<div class="form-group">';
+            div_data +=
+              '<button id="save_result" type="submit" class="btn btn-success btn-block">Save Result</button>';
+            div_data += '</div>';
+
+            $("#student_data").html(div_data);
+            $("#student_data").show();
+            $("#empty_student").hide();
+          } else {
+            $("#student_data").hide();
+            $("#empty_student").show();
+          }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+          alert('Error in Fetching Students!');
+          $("#student_data").hide();
+          $("#empty_student").hide();
+        })
+    });
+  })
+</script>
+{% endblock custom_js %}
