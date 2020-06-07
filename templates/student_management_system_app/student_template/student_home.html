@@ -136,11 +136,7 @@ Home
 <script>
   $(function () {
 
-    if ({
-        {
-          total_attendance
-        }
-      } > 0) {
+    if ({{ total_attendance }} > 0) {
 
       /* ChartJS
        * -------
@@ -191,21 +187,9 @@ Home
       //-------------
       //- BAR CHART -
       //-------------
-      var subjects = {
-        {
-          subject_names | safe
-        }
-      };
-      var present_data = {
-        {
-          present_data
-        }
-      };
-      var absent_data = {
-        {
-          absent_data
-        }
-      };
+      var subjects = {{ subject_names | safe }};
+      var present_data = {{ present_data }};
+      var absent_data = {{ absent_data }};
 
       var areaChartData = {
         labels: subjects,
