@@ -135,13 +135,13 @@ Home
 {% block custom_js %}
 <script>
   $(function () {
-
-    if ({{ total_attendance }} > 0) {
-
+    
+    if({{ total_attendance }} > 0){
+    
       /* ChartJS
-       * -------
-       * Here we will create a few charts using ChartJS
-       */
+      * -------
+      * Here we will create a few charts using ChartJS
+      */
 
       //-------------
       //- PIE CHART -
@@ -155,11 +155,7 @@ Home
           'Absence',
         ],
         datasets: [{
-          data: [
-              {{ total_attendance }}, 
-              {{ presence_attendance }}, 
-              {{ absence_attendance }}
-            ],
+          data: [{{ total_attendance }}, {{ presence_attendance }}, {{ absence_attendance }}],
           backgroundColor: ['#17a2b8', '#28a745', '#dc3545'],
         }]
       }
@@ -179,34 +175,34 @@ Home
       //-------------
       //- BAR CHART -
       //-------------
-      var subjects = {{ subject_names | safe }};
+      var subjects = {{ subject_names|safe }};
       var present_data = {{ present_data }};
       var absent_data = {{ absent_data }};
 
       var areaChartData = {
         labels: subjects,
         datasets: [{
-            label: 'Present in Class',
-            backgroundColor: 'rgba(60,141,188,0.9)',
-            borderColor: 'rgba(60,141,188,0.8)',
-            pointRadius: false,
-            pointColor: '#3b8bba',
-            pointStrokeColor: 'rgba(60,141,188,1)',
-            pointHighlightFill: '#fff',
+            label               : 'Present in Class',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius         : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(60,141,188,1)',
-            data: present_data
+            data                : present_data
           },
           {
-            label: 'Absent in Class',
-            backgroundColor: 'rgba(210, 214, 222, 1)',
-            borderColor: 'rgba(210, 214, 222, 1)',
-            pointRadius: false,
-            pointColor: 'rgba(210, 214, 222, 1)',
-            pointStrokeColor: '#c1c7d1',
-            pointHighlightFill: '#fff',
+            label               : 'Absent in Class',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(220,220,220,1)',
-            data: absent_data
-          },
+            data                : absent_data
+          },     
         ]
       }
 
