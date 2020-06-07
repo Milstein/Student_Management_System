@@ -19,6 +19,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 
+from django.templatetags.static import static
+
 from student_management_system_app.forms import StudentCreationForm, StudentEditForm, StudentBulkUploadForm, \
     StudentBlukUploadForm
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
@@ -970,6 +972,8 @@ def send_staff_notification(request):
         'notification':{
             'title': 'Message from Student Management System',
             'body': message,
+            'click_action': reverse('student_management_system_app:student_all_notifications'),
+            'icon': static('logo.png')
         },
         'to': token
     }
@@ -994,8 +998,8 @@ def send_student_notification(request):
         'notification':{
             'title': 'Message from Student Management System',
             'body': message,
-            'click_action':
-            'icon': 
+            'click_action': reverse('student_management_system_app:student_all_notifications'),
+            'icon': static('logo.png')
         },
         'to': token
     }

@@ -133,9 +133,16 @@ Staff Notification
       .done(function (response) {
         // console.log(response);
         if (response == "True") {
-          console.log("Message sent.")
+          alert("Message sent.");
+
+          //Clear the Popup
+          $('#myModal').modal('hide');
+
+          $("#staff_id").val('');
+          $(".name_span").text('');
+
         } else {
-          console.log("Message can't be sent!")
+          alert("Message can't be sent!");
         }
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
