@@ -30,7 +30,7 @@ SECRET_KEY = '*4-)jp6*=kgrbik)mlrb3ya3fb15n&se@86nuf(r!&rro@bti4'
 # Heroku::
 DEBUG = False
 
-ALLOWED_HOSTS = ['milsteinsms.herokuapp.com']
+ALLOWED_HOSTS = ['milsteinsms.herokuapp.com', 'milstein.pythonanywhere.com']
 
 
 # Application definition
