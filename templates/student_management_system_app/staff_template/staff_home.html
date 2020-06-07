@@ -35,8 +35,7 @@ Home
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-          <a href="{% url 'student_management_system_app:view_attendance_reports' %}" class="small-box-footer">View
-            reports
+          <a href="{% url 'student_management_system_app:view_attendance_reports' %}" class="small-box-footer">View reports
             <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
@@ -97,7 +96,7 @@ Home
           </div>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->
+        <!-- /.card -->        
       </div>
       <!-- /.col (LEFT) -->
 
@@ -114,8 +113,7 @@ Home
           </div>
           <div class="card-body">
             <div class="chart" id="stackedbar_subject_chart">
-              <canvas id="subject_stackedBarChart"
-                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <canvas id="subject_stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
             </div>
           </div>
           <!-- /.card-body -->
@@ -141,8 +139,7 @@ Home
           </div>
           <div class="card-body">
             <div class="chart" id="stackedbar_student_chart">
-              <canvas id="student_stackedBarChart"
-                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <canvas id="student_stackedBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
             </div>
           </div>
           <!-- /.card-body -->
@@ -160,13 +157,13 @@ Home
 {% block custom_js %}
 <script>
   $(function () {
-
-    if ({{ attendance_count }} > 0) {
-
+    
+    if({{ attendance_count }} > 0){
+    
       /* ChartJS
-       * -------
-       * Here we will create a few charts using ChartJS
-       */
+      * -------
+      * Here we will create a few charts using ChartJS
+      */
 
       //-------------
       //- PIE CHART -
@@ -179,10 +176,7 @@ Home
           'Leave',
         ],
         datasets: [{
-          data: [
-              {{ attendance_count }}, 
-              {{ approved_leave_count }}
-            ],
+          data: [{{ attendance_count }}, {{ approved_leave_count }}],
           backgroundColor: ['#28a745', '#dc3545'],
         }]
       }
@@ -202,40 +196,40 @@ Home
       //---------------------
       //- STACKED BAR CHART -
       //---------------------      
-      var subjects = {{ subject_list | safe }};
+      var subjects = {{ subject_list|safe }};
       var present_attendance_by_subject_count = {{ present_attendance_by_subject_count_list }};
       var absent_attendance_by_subject_count = {{ absent_attendance_by_subject_count_list }};
-
+      
       var barChartData = {
         labels: subjects,
         datasets: [{
-            label: 'Present',
-            backgroundColor: 'rgba(60,141,188,0.9)',
-            borderColor: 'rgba(60,141,188,0.8)',
-            pointRadius: false,
-            pointColor: '#3b8bba',
-            pointStrokeColor: 'rgba(60,141,188,1)',
-            pointHighlightFill: '#fff',
+            label               : 'Present',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius         : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(60,141,188,1)',
-            data: present_attendance_by_subject_count
+            data                : present_attendance_by_subject_count
           },
           {
-            label: 'Absent',
-            backgroundColor: 'rgba(210, 214, 222, 1)',
-            borderColor: 'rgba(210, 214, 222, 1)',
-            pointRadius: false,
-            pointColor: 'rgba(210, 214, 222, 1)',
-            pointStrokeColor: '#c1c7d1',
-            pointHighlightFill: '#fff',
+            label               : 'Absent',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(220,220,220,1)',
-            data: absent_attendance_by_subject_count
-          },
+            data                : absent_attendance_by_subject_count
+          },  
         ]
       }
-
+      
       var stackedBarChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive              : true,
+        maintainAspectRatio     : false,
         scales: {
           xAxes: [{
             stacked: true,
@@ -243,19 +237,19 @@ Home
           yAxes: [{
             stacked: true,
             ticks: {
-              // max: 5,
-              min: 0,
-              stepSize: 1
+                // max: 5,
+                min: 0,
+                stepSize: 1
             }
           }]
         }
       }
 
       var stackedBarChartCanvas = $('#subject_stackedBarChart').get(0).getContext('2d')
-      var stackedBarChartData = jQuery.extend(true, {}, barChartData)
+      var stackedBarChartData = jQuery.extend(true, {}, barChartData)     
 
       var subject_stackedBarChart = new Chart(stackedBarChartCanvas, {
-        type: 'bar',
+        type: 'bar', 
         data: stackedBarChartData,
         options: stackedBarChartOptions
       })
@@ -263,51 +257,51 @@ Home
       //---------------------
       //- STACKED BAR CHART -
       //---------------------
-      var students = {{ student_list | safe }};
+      var students = {{ student_list|safe }};
       var present_attendance_by_student_count = {{ present_attendance_by_student_count_list }};
       var absent_attendance_by_student_count = {{ absent_attendance_by_student_count_list }};
-
+      
       var barChartData = {
         labels: students,
         datasets: [{
-            label: 'Present',
-            backgroundColor: 'rgba(60,141,188,0.9)',
-            borderColor: 'rgba(60,141,188,0.8)',
-            pointRadius: false,
-            pointColor: '#3b8bba',
-            pointStrokeColor: 'rgba(60,141,188,1)',
-            pointHighlightFill: '#fff',
+            label               : 'Present',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius         : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(60,141,188,1)',
-            data: present_attendance_by_student_count
+            data                : present_attendance_by_student_count
           },
           {
-            label: 'Absent',
-            backgroundColor: 'rgba(210, 214, 222, 1)',
-            borderColor: 'rgba(210, 214, 222, 1)',
-            pointRadius: false,
-            pointColor: 'rgba(210, 214, 222, 1)',
-            pointStrokeColor: '#c1c7d1',
-            pointHighlightFill: '#fff',
+            label               : 'Absent',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
             pointHighlightStroke: 'rgba(220,220,220,1)',
-            data: absent_attendance_by_student_count
-          },
+            data                : absent_attendance_by_student_count
+          },  
         ]
       }
 
       var stackedBarChartCanvas = $('#student_stackedBarChart').get(0).getContext('2d')
       var stackedBarChartData = jQuery.extend(true, {}, barChartData)
-
+      
       var student_stackedBarChart = new Chart(stackedBarChartCanvas, {
-        type: 'bar',
+        type: 'bar', 
         data: stackedBarChartData,
         options: stackedBarChartOptions
       })
-    } else {
+    }else{
       $("#pie_chart").html("No Attendance Records Found!")
       $("#stackedbar_subject_chart").html("No Attendance Records Found!")
       $("#stackedbar_student_chart").html("No Attendance Records Found!")
     }
-
+      
   })
 </script>
 <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
