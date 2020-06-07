@@ -179,15 +179,10 @@ Home
           'Leave',
         ],
         datasets: [{
-          data: [{
-            {
-              attendance_count
-            }
-          }, {
-            {
-              approved_leave_count
-            }
-          }],
+          data: [
+              {{ attendance_count }}, 
+              {{ approved_leave_count }}
+            ],
           backgroundColor: ['#28a745', '#dc3545'],
         }]
       }

@@ -155,19 +155,11 @@ Home
           'Absence',
         ],
         datasets: [{
-          data: [{
-            {
-              total_attendance
-            }
-          }, {
-            {
-              presence_attendance
-            }
-          }, {
-            {
-              absence_attendance
-            }
-          }],
+          data: [
+              {{ total_attendance }}, 
+              {{ presence_attendance }}, 
+              {{ absence_attendance }}
+            ],
           backgroundColor: ['#17a2b8', '#28a745', '#dc3545'],
         }]
       }
