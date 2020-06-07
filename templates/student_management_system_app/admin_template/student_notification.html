@@ -148,11 +148,12 @@ Student Notification
       .done(function (response) {
         // console.log(response);
         if (response == "True") {
-          alert("Message sent.");
+          // alert("Message sent.");
 
           //Clear the Popup
           $('#myModal').modal('hide');
 
+          $("#message_note").val('');
           $("#student_id").val('');
           $(".name_span").text('');
 

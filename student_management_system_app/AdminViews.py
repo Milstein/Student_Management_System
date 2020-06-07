@@ -972,7 +972,7 @@ def send_staff_notification(request):
         'notification':{
             'title': 'Message from Student Management System',
             'body': message,
-            'click_action': reverse('student_management_system_app:student_all_notifications'),
+            'click_action': reverse('student_management_system_app:staff_all_notifications'),
             'icon': static('logo.png')
         },
         'to': token

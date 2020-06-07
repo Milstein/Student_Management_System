@@ -133,11 +133,12 @@ Staff Notification
       .done(function (response) {
         // console.log(response);
         if (response == "True") {
-          alert("Message sent.");
+          // alert("Message sent.");
 
           //Clear the Popup
           $('#myModal').modal('hide');
 
+          $("#message_note").val('');
           $("#staff_id").val('');
           $(".name_span").text('');
 
