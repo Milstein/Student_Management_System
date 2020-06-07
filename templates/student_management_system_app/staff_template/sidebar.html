@@ -26,6 +26,17 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        <li class="nav-header">STUDENT RESULTS</li>
+        <li class="nav-item">
+          {% url 'student_management_system_app:staff_add_result' as staff_add_result %}
+          <a href="{{ staff_add_result }}" class="nav-link {% if request.path == staff_add_result %}active{% endif %}">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Student Result
+            </p>
+          </a>
+        </li>
+        
         <li class="nav-header">ATTENDANCE REPORTS</li>
         <li class="nav-item">
           {% url 'student_management_system_app:take_attendance' as take_attendance %}
@@ -75,7 +86,7 @@
               Send Feedback
             </p>
           </a>
-        </li>
+        </li>       
 
       </ul>
     </nav>
