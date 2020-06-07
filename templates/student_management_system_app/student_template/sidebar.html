@@ -62,8 +62,8 @@
 
         <li class="nav-header">NOTIFICATIONS</li>
         <li class="nav-item">
-            {% url 'student_management_system_app:staff_all_notifications' as staff_all_notifications %}
-            <a href="{{ staff_all_notifications }}" class="nav-link {% if request.path == staff_all_notifications %}active{% endif %}">
+            {% url 'student_management_system_app:student_all_notifications' as student_all_notifications %}
+            <a href="{{ student_all_notifications }}" class="nav-link {% if request.path == student_all_notifications %}active{% endif %}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                     Your Notifications

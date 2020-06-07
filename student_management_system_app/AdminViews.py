@@ -994,6 +994,8 @@ def send_student_notification(request):
         'notification':{
             'title': 'Message from Student Management System',
             'body': message,
+            'click_action':
+            'icon': 
         },
         'to': token
     }
