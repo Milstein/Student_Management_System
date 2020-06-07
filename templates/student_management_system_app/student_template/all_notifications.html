@@ -1,0 +1,84 @@
+{% extends 'student_management_system_app/student_template/base_template.html' %}
+
+{% block title %}Student Notifications{% endblock title %}
+
+{% block page_title %}
+Student Notifications
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">All Notifications</h3>
+            <div class="card-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body table-responsive p-0">
+            <!-- class="table table-hover text-nowrap" -->
+            <table id="tbl_students" class="table table-bordered table-hover" data-page-length='10'>
+              <thead class="thead-light">
+                <tr>
+                  <th>S.No.</th>
+                  <th>Notifications</th>    
+                  <th>Date Sent</th>             
+                </tr>
+              </thead>
+              <tbody>
+                {% if notifications %}
+                {% for notification in notifications %}
+                <tr>
+                  <td>{{ forloop.counter}}</td>
+                  <td>{{ notification.message }}</td>
+                  <td>{{ notification.created_at }}</td>                                  
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td colspan="3">
+                    <div class="alert alert-warning alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                      <h5><i class="icon fas fa-exclamation-triangle"></i>Alert!</h5>
+                      You do not have any notifications yet!
+                    </div>
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+  $('#tbl_students').DataTable({
+    'paging'      : true,
+    'lengthChange': false,
+    'searching'   : false,
+    'ordering'    : true,
+    'info'        : true,
+    'autoWidth'   : false
+  });
+</script>
+{% endblock custom_js %}

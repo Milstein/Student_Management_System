@@ -1,0 +1,154 @@
+{% extends 'student_management_system_app/admin_template/base_template.html' %}
+
+{% block title %}Staff Notification{% endblock title %}
+
+{% block page_title %}
+Staff Notification
+{% endblock page_title %}
+
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Staffs</h3>
+
+            <div class="card-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>User Name</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if staffs %}
+                  {% for staff in staffs %}
+                  <tr>
+                    <td>{{ staff.admin.id }}</td>
+                    <td>{{ staff.admin.first_name }}</td>
+                    <td>{{ staff.admin.last_name }}</td>
+                    <td>{{ staff.admin.username }}</td>
+                    <td>{{ staff.admin.email }}</td>
+                    <td><a href="#" class="btn btn-success show_notification" data-toggle="modal"
+                      data-target="#myModal">Send Notification</a></td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                      <td colspan="6">
+                        <div class="alert alert-warning alert-dismissible">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          <h5><i class="icon fas fa-exclamation-triangle"></i>Alert!</h5>
+                          You have not saved any staffs yet!
+                        </div>
+                      </td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Send Notification to <span class="name_span"></span></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <textarea id="message_note" name="message" class="form-control" rows="3"
+            placeholder="Enter your message"></textarea>
+          <input id="staff_id" type="hidden" name="staff_id" class="form-control">
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-info btn-block btn_send_notification">Send Notification</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+  $(".show_notification").click(function () {
+    var staff_id = $(this).parents("tr").children("td:eq(0)").text();
+    var staff_name = $(this).parents("tr").children("td:eq(3)").text();
+    $("#staff_id").val(staff_id);
+    $(".name_span").text(staff_name);
+  });
+
+  $(".btn_send_notification").click(function () {
+    var staff_id = $("#staff_id").val();
+    var message = $("#message_note").val();
+    sendNotification(staff_id, message);
+  });
+
+  function sendNotification(staff_id, message) {
+    $.ajax({
+        url: "{% url 'student_management_system_app:send_staff_notification'%}",
+        type: 'POST',
+        data: {
+          staff_id: staff_id,
+          message: message
+        },
+        datatype: 'json'
+      })
+      .done(function (response) {
+        // console.log(response);
+        if (response == "True") {
+          // alert("Message sent.");
+
+          //Clear the Popup
+          $('#myModal').modal('hide');
+
+          $("#message_note").val('');
+          $("#staff_id").val('');
+          $(".name_span").text('');
+
+        } else {
+          alert("Message can't be sent!");
+        }
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        alert("Error while sending Message!");
+      });
+  }
+</script>
+{% endblock custom_js %}

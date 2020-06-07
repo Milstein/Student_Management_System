@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from student_management_system_app.models import Student, Subject, Attendance, AttendanceReport, \
-    LeaveReportStudent, FeedBackStudent, CustomUser, Course
+    LeaveReportStudent, FeedBackStudent, CustomUser, Course, NotificationStudent
 
 
 @login_required
@@ -157,3 +158,23 @@ def student_feedback_save(request):
         except Exception as e:
             messages.error(request,"Failed to Leave a Feedback Message {}".format(e))
             return redirect("student_management_system_app:student_feedback")
+
+
+@csrf_exempt
+def student_fcm_token_save(request):
+    try:
+        token = request.POST.get('token')
+        student = Student.objects.get(admin=request.user.id)
+        student.fcm_token = token
+        student.save()
+        return HttpResponse('True')
+    except:
+        return HttpResponse('False')
+
+
+@login_required
+def student_all_notifications(request):
+    student = Student.objects.get(admin=request.user.id)
+    notifications = NotificationStudent.objects.filter(student_id=student.id).order_by('-created_at')
+    return render(request, 'student_management_system_app/student_template/all_notifications.html',
+                  {'notifications': notifications})

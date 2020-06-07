@@ -190,6 +190,26 @@
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-header">NOTIFICATIONS</li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:admin_send_notification_to_staff' as admin_send_notification_to_staff %}
+                    <a href="{{ admin_send_notification_to_staff }}" class="nav-link {% if request.path == admin_send_notification_to_staff %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Send Notification to Staff
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'student_management_system_app:admin_send_notification_to_student' as admin_send_notification_to_student %}
+                    <a href="{{ admin_send_notification_to_student }}" class="nav-link {% if request.path == admin_send_notification_to_student %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Send Notification to Student
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
