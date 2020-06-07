@@ -90,4 +90,5 @@ def show_firebase_server_worker(request):
         '    return self.ServiceWorkerRegistration.showNotification(notification.title, notificationOptions);' \
         '});'
 
+    print(response)
     return HttpResponse(response)
