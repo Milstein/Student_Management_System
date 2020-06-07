@@ -1,17 +1,16 @@
+import csv
+import json
 import os
+import requests
 
 from datetime import datetime
 
-import csv
-import io
-import json
-
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.sites import requests
 from django.core.files.storage import FileSystemStorage
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
@@ -25,7 +24,6 @@ from student_management_system_app.forms import StudentCreationForm, StudentEdit
 from student_management_system_app.models import CustomUser, Course, Subject, Staff, Student, SessionYear, \
     StudentBulkUpload, FeedBackStudent, FeedBackStaff, LeaveReportStudent, LeaveReportStaff, Attendance, \
     AttendanceReport, NotificationStudent, NotificationStaff
-from django import forms
 
 
 class DateInput(forms.DateInput):
